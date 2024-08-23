@@ -2,7 +2,7 @@ package com.gifter.app.user.controller;
 
 import com.gifter.app.user.service.UserService;
 import com.gifter.app.user.entity.GifterUser;
-import com.gifter.app.user.entity.register.UserRegisterDto;
+import com.gifter.app.user.entity.dto.UserRegisterDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +18,8 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PostMapping
-    public GifterUser postUser(@Valid @RequestBody UserRegisterDto userDto) {
+    @PostMapping("register")
+    public GifterUser registerUseCase(@Valid @RequestBody UserRegisterDto userDto) {
         return this.userService.registerUseCase(userDto);
     }
 

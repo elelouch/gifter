@@ -7,5 +7,5 @@ import java.util.Map;
 @Data
 public class GenericErrorDto {
     private Map<String, Object> reasons;
-    private String statusMessage;
+    private String status;
 }

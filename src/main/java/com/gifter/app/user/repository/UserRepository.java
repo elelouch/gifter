@@ -9,5 +9,8 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<GifterUser, Long> {
-    List<GifterUser> findByEmailOrPassword(String email, String password);
+    List<GifterUser> findByEmailOrUsername(String email, String username);
+
+    @Query("select u from GifterUser u where u.email = ?1")
+    GifterUser findByEmail(String email);
 }

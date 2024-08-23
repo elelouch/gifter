@@ -1,41 +1,45 @@
 package com.gifter.app.user.service;
 
 import com.gifter.app.user.entity.GifterUser;
-import com.gifter.app.user.entity.register.UserRegisterDto;
-import com.gifter.app.user.entity.register.UserRegisterValidator;
-import com.gifter.app.user.errors.UserRegisterValidationException;
+import com.gifter.app.user.entity.dto.UserLoginDto;
+import com.gifter.app.user.entity.dto.UserRegisterDto;
+import com.gifter.app.user.errors.UserAlreadyCreatedException;
+import com.gifter.app.user.errors.UserNotFoundException;
 import com.gifter.app.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserRegisterValidator userRegisterValidator;
+    @Override
+    public GifterUser loginUseCase(UserLoginDto userLoginDto) {
+        String email = userLoginDto.getEmail();
+        GifterUser user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+
+        return userRepository.save(user);
+    }
 
     @Override
     public GifterUser registerUseCase(UserRegisterDto userRegisterDto) {
-        Errors errors = userRegisterValidator.validateObject(userRegisterDto);
-
-        if(errors.hasErrors()) {
-            throw new UserRegisterValidationException(errors);
-        }
-
         String email = userRegisterDto.getEmail();
         String username = userRegisterDto.getUsername();
-        String password = userRegisterDto.getPassword();
         GifterUser user = new GifterUser();
 
-        if(!userRepository.findByEmailOrPassword(email, username).isEmpty()) {
-            return user;
+        if(!userRepository.findByEmailOrUsername(email, username).isEmpty()) {
+            throw new UserAlreadyCreatedException();
         }
 
         user.setEmail(email);
-        user.setPassword(password);
+        user.setPassword(userRegisterDto.getPassword());
         user.setUsername(username);
 
         return userRepository.save(user);
@@ -43,6 +47,6 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public GifterUser getUserById(Long id) {
-      return userRepository.findById(id).orElseThrow(UserRegisterValidationException::new);
+      return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
   }
 }
