@@ -12,18 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@Data
 @Entity
-@Getter
-@Setter
-public class GifterUser extends User {
-    public GifterUser() {
-        super("user", "password", new ArrayList<>());
-    }
-
-    public GifterUser(String username, String password, List<GrantedAuthority> authorities) {
-        super("elias", "rojas", authorities);
-    }
-
+public class GifterUser {
+    @Id
+    private Long id;
+    private String username;
+    private String password;
+    private boolean active;
     private String firstName;
     private String lastName;
     private String email;

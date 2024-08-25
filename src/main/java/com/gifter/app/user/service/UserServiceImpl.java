@@ -7,6 +7,7 @@ import com.gifter.app.user.errors.UserAlreadyCreatedException;
 import com.gifter.app.user.errors.UserNotFoundException;
 import com.gifter.app.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.parsing.PassThroughSourceExtractor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     @Override
     public GifterUser loginUseCase(UserLoginDto userLoginDto) {
@@ -32,15 +36,18 @@ public class UserServiceImpl implements UserService {
     public GifterUser registerUseCase(UserRegisterDto userRegisterDto) {
         String email = userRegisterDto.getEmail();
         String username = userRegisterDto.getUsername();
-        GifterUser user = new GifterUser();
 
         if(!userRepository.findByEmailOrUsername(email, username).isEmpty()) {
             throw new UserAlreadyCreatedException();
         }
 
-        user.setEmail(email);
-        user.setPassword(userRegisterDto.getPassword());
-        user.setUsername(username);
+        String encodedPass = encoder.encode(userRegisterDto.getPassword());
+        GifterUser user = new GifterUser();
+        user.setPassword(encodedPass);
+        user.setUsername(userRegisterDto.getUsername());
+        user.setEmail(userRegisterDto.getEmail());
+        user.setFirstName(userRegisterDto.getFirstName());
+        user.setLastName(userRegisterDto.getLastName());
 
         return userRepository.save(user);
     }
