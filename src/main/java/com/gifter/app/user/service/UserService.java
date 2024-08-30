@@ -4,8 +4,9 @@ import com.gifter.app.user.entity.GifterUser;
 import com.gifter.app.user.entity.dto.UserLoginDto;
 import com.gifter.app.user.entity.dto.UserRegisterDto;
 
+import java.util.Optional;
+
 public interface UserService {
     GifterUser registerUseCase(UserRegisterDto registerDto);
-    GifterUser loginUseCase(UserLoginDto registerDto);
-    GifterUser getUserById(Long id);
+    Optional<GifterUser> getUserById(Long id);
 }

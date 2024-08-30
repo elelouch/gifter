@@ -22,17 +22,6 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder encoder;
 
     @Override
-    public GifterUser loginUseCase(UserLoginDto userLoginDto) {
-        String email = userLoginDto.getEmail();
-        GifterUser user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new UserNotFoundException();
-        }
-
-        return userRepository.save(user);
-    }
-
-    @Override
     public GifterUser registerUseCase(UserRegisterDto userRegisterDto) {
         String email = userRegisterDto.getEmail();
         String username = userRegisterDto.getUsername();
@@ -52,8 +41,4 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-  @Override
-  public GifterUser getUserById(Long id) {
-      return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-  }
 }

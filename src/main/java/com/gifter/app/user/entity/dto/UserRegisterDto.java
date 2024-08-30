@@ -24,5 +24,6 @@ public class UserRegisterDto {
     @Size(max = 255, min = 3)
     private String firstName;
     @Pattern(regexp = "([A-Z])\\w+")
+    @Size(max = 255, min = 3)
     private String lastName;
 }

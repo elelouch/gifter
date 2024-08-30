@@ -9,7 +9,9 @@ case $user_input in
             '{
               "email":"rojas.elias@outlook.com",
                 "password":"EliasRojas874",
-                "username":"dooo"
+                "username":"joji3434",
+                "firstName":"Elias",
+                "lastName":"Rojas"
             }'
         ;;
     "post-user_fail")
@@ -29,6 +31,17 @@ case $user_input in
                 "password":"lakjsdf",
                 "username":"dooo"
             }'
+        ;;
+    "post_and_get")
+        curl "${URI}/${USER_PATH}/register" -X POST -H "Content-Type: application/json" \
+            -d \
+            '{
+              "email":"ew@outlook.com",
+                "password":"IsInMyDreams234",
+                "username":"onlytimewespeak234",
+                "firstName": "Elias",
+                "lastName": "Rojas"
+            }';
         ;;
     "get-user")
         curl "${URI}/${USER_PATH}/$2"

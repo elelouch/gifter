@@ -1,5 +1,6 @@
 package com.gifter.app.user.controller;
 
+import com.gifter.app.user.entity.dto.UserLoginDto;
 import com.gifter.app.user.service.UserService;
 import com.gifter.app.user.entity.GifterUser;
 import com.gifter.app.user.entity.dto.UserRegisterDto;
@@ -23,4 +24,8 @@ public class UserController {
         return this.userService.registerUseCase(userDto);
     }
 
+    @PostMapping("login")
+    public GifterUser loginUseCase(@Valid @RequestBody UserLoginDto loginDto) {
+        return this.userService.loginUseCase(loginDto);
+    }
 }
