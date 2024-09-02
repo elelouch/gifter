@@ -1,4 +1,4 @@
-package com.gifter.app.user.entity.dto;
+package com.gifter.app.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -7,7 +7,7 @@ import lombok.Data;
 import jakarta.validation.constraints.Size;
 
 @Data
-public class UserRegisterDto {
+public class RegisterDto {
     @Size(max=255, min=3)
     @Pattern(regexp="^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$")
     @NotNull

@@ -1,8 +1,8 @@
-package com.gifter.app.user.errors;
+package com.gifter.app.auth.errors;
 
 
 public class UserAlreadyCreatedException extends RuntimeException{
     public UserAlreadyCreatedException() {
-        super();
+        super("User already created");
     }
 }

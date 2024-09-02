@@ -1,4 +1,4 @@
-package com.gifter.app.user.errors.dto;
+package com.gifter.app.auth.errors.dto;
 
 import lombok.Data;
 
