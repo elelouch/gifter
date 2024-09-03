@@ -27,8 +27,8 @@ public class AuthController {
         return ResponseEntity.ok(authService.registerUseCase(userDto));
     }
 
-    @GetMapping("register")
-    public String schizoid() {
+    @GetMapping("test")
+    public String test() {
         return "hello world";
     }
 
