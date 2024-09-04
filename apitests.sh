@@ -7,13 +7,14 @@ api_test(){
         "post-user")
             curl "${URI}/${USER_PATH}/register" -X POST -H "Content-Type: application/json" \
                 -d \
-                '{
-                  "email":"rojas.elias@outlook.com",
-                    "password":"EliasRojas874",
-                    "username":"joji3434",
-                    "firstName":"Elias",
-                    "lastName":"Rojas"
-                }'
+                "{
+                    \"email\":\"rojas.elias${RANDOM}@outlook.com\",
+                    \"password\":\"EliasRojas874\",
+                    \"username\":\"joji${RANDOM}\",
+                    \"firstName\":\"Elias\",
+                    \"lastName\":\"Rojas\"
+                }"
+
             ;;
         "post-user_fail")
             curl "${URI}/${USER_PATH}/register" -X POST -H "Content-Type: application/json" \
@@ -48,10 +49,11 @@ api_test(){
             curl "${URI}/${USER_PATH}/$2"
             ;;
         "test-jwt")
-            opa=$(api_test "post-user")
-            echo $opa
+            token=$(api_test "post-user" | jq '.token' | tr -d '"')
+            echo "Token received ${token}"
+            curl -H "Authorization: Bearer ${token}" "${URI}/${USER_PATH}/authenticated"
             ;;
     esac
 }
 
-api_test $user_input
+api_test $1

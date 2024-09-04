@@ -21,7 +21,7 @@ public class AuthControllerAdvice extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    @ExceptionHandler({UsernameNotFoundException.class})
+    @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<Object> handleUserNotFound(UsernameNotFoundException ex) {
         Map<String, String> response = new HashMap<>();
         response.put("status", "error");
@@ -29,7 +29,7 @@ public class AuthControllerAdvice extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    @ExceptionHandler({IncorrectPasswordException.class})
+    @ExceptionHandler(IncorrectPasswordException.class)
     public ResponseEntity<Object> handleIncorrectPassword(IncorrectPasswordException ex) {
         Map<String, String> response = new HashMap<>();
         response.put("status", "error");

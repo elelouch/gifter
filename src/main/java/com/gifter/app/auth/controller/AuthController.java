@@ -28,8 +28,13 @@ public class AuthController {
     }
 
     @GetMapping("test")
+    public String pedro() {
+        return "Testing endpoint";
+    }
+
+    @GetMapping("authenticated")
     public String test() {
-        return "hello world";
+        return "This user is authenticated";
     }
 
 }

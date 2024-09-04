@@ -1,4 +1,5 @@
 package com.gifter.app.user.entity;
+import com.gifter.app.gift.entity.Gift;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -28,9 +29,16 @@ public class GifterUser implements UserDetails {
     private String firstName;
     private String lastName;
     private String email;
+    @ManyToMany(mappedBy = "followers")
+    private Set<GifterUser> following;
+    @ManyToMany
+    @JoinTable(name="following_followers", joinColumns = {@JoinColumn(name="following_id")}, inverseJoinColumns = {@JoinColumn(name="follower_id")})
+    private Set<GifterUser> followers;
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private Set<Gift> gifts;
     @Enumerated(EnumType.STRING)
     private Role role;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.role.name()));

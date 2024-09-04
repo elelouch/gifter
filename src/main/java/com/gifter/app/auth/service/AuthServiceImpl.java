@@ -7,6 +7,7 @@ import com.gifter.app.auth.errors.IncorrectPasswordException;
 import com.gifter.app.auth.errors.UserAlreadyCreatedException;
 import com.gifter.app.security.jwt.JwtService;
 import com.gifter.app.user.entity.GifterUser;
+import com.gifter.app.user.entity.Role;
 import com.gifter.app.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,6 +39,8 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(userRegisterDto.getEmail());
         user.setFirstName(userRegisterDto.getFirstName());
         user.setLastName(userRegisterDto.getLastName());
+        user.setRole(Role.USER);
+
         userRepository.save(user);
 
         return new AuthResponse(jwtService.generateToken(user));

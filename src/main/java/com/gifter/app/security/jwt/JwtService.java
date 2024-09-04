@@ -1,5 +1,6 @@
 package com.gifter.app.security.jwt;
 
+import com.gifter.app.user.entity.GifterUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
@@ -18,7 +19,7 @@ import java.util.function.Function;
 public class JwtService {
     private static final String SECRET = "Hv6gY2W05oLUrbZkzWGK1D8CDXRb8tYxztNYi0hS+rjcDGICk2PvUsC0E0OiUMU2";
 
-    public String extractUsername(String token) {
+    public String extractId(String token) {
         return extractClaims(token, Claims::getSubject);
     }
 
@@ -42,10 +43,11 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        GifterUser user = (GifterUser) userDetails;
         return Jwts
                 .builder()
                 .claims(extraClaims)
-                .subject(userDetails.getUsername())
+                .subject(user.getId().toString())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60))
                 .signWith(getSigningKey())
@@ -54,8 +56,9 @@ public class JwtService {
 
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return !userDetails.getUsername().equals(username) && !isTokenExpired(token);
+        GifterUser user = (GifterUser) userDetails;
+        final String idStr = extractId(token);
+        return user.getId() == Long.parseLong(idStr) && !isTokenExpired(token);
     }
 
     public boolean isTokenExpired(String token) {
