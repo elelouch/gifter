@@ -19,7 +19,6 @@ public class GifterUserDto {
     private String firstName;
     private String lastName;
     private String email;
-    private Set<Gift> gifts;
     private Role role;
 
     public static GifterUserDto fromEntity(GifterUser entity) {
@@ -27,7 +26,6 @@ public class GifterUserDto {
         dto.setId(entity.getId());
         dto.setEmail(entity.getEmail());
         dto.setUsername(entity.getUsername());
-        dto.setGifts(entity.getGifts());
         dto.setRole(entity.getRole());
         dto.setEnabled(entity.isEnabled());
         return dto;

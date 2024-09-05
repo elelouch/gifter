@@ -50,10 +50,41 @@ api_test(){
             ;;
         "test-jwt")
             token=$(api_test "post-user" | jq '.token' | tr -d '"')
-            echo "Token received ${token}"
-            curl -H "Authorization: Bearer ${token}" "${URI}/${USER_PATH}/authenticated"
+            curl -H "Authorization: Bearer $token" "${URI}/${USER_PATH}/authenticated"
             ;;
+
     esac
 }
 
-api_test $1
+api_test_authenticated (){
+    token=$(api_test "post-user" | jq '.token' | tr -d '"')
+    user_id=$(curl -H "Authorization: Bearer $token" "${URI}/user/current" | jq '.id' | tr -d '"')
+
+    case $1 in
+        "add-gifts")
+            curl -X POST -H "Authorization: Bearer $token" "${URI}/user/$user_id/gifts" \
+                -H "Content-Type: application/json" \
+                -d \
+                '[{
+                  "id": 0,
+                    "imageUrl":"IsInMyDreams234",
+                    "name":"onlytimewespeak234",
+                    "location": "Elias",
+                },
+                {
+                  "id": 0
+                    "imageUrl":"IsInMyDreams234",
+                    "name":"onlytimewespeak234",
+                    "location": "Elias",
+                }]'
+            ;;
+        "get-gifts")
+            api_test_authenticated "add-gifts"
+    esac
+}
+
+if [ "$1" = "auth" ]; then
+    api_test_authenticated $2
+else 
+    api_test $2
+fi
