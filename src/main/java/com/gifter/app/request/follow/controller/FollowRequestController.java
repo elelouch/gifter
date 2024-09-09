@@ -1,5 +1,8 @@
-package com.gifter.app.request.follow;
+package com.gifter.app.request.follow.controller;
 
+import com.gifter.app.request.follow.FollowRequestService;
+import com.gifter.app.request.follow.dto.UserFollowRequestDto;
+import com.gifter.app.request.follow.dto.FollowRequestDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +20,7 @@ public class FollowRequestController {
         followRequestService.createFollowRequest(followRequest);
     }
 
-    @DeleteMapping("${id}")
+    @DeleteMapping("{id}")
     public void removeFollowRequest(@PathVariable Long id) {
         followRequestService.removeFollowRequest(id);
     }
@@ -25,5 +28,10 @@ public class FollowRequestController {
     @GetMapping
     public List<UserFollowRequestDto> getUserRequests() {
         return followRequestService.getUserFollowRequests();
+    }
+
+    @PostMapping("{id}")
+    public void useFollowRequest(@PathVariable Long id) {
+        followRequestService.useFollowRequest(id);
     }
 }

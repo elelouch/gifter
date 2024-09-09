@@ -44,14 +44,7 @@ public class JwtService {
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         GifterUser user = (GifterUser) userDetails;
-        return Jwts
-                .builder()
-                .claims(extraClaims)
-                .subject(user.getId().toString())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60))
-                .signWith(getSigningKey())
-                .compact();
+        return Jwts.builder().claims(extraClaims).subject(user.getId().toString()).issuedAt(new Date(System.currentTimeMillis())).expiration(new Date(System.currentTimeMillis() + 1000 * 60)).signWith(getSigningKey()).compact();
     }
 
 

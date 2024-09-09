@@ -1,5 +1,6 @@
-package com.gifter.app.request.follow;
+package com.gifter.app.request.follow.dto;
 
+import com.gifter.app.request.follow.entity.FollowRequest;
 import com.gifter.app.user.dto.GifterUserDto;
 import com.gifter.app.user.entity.GifterUser;
 import lombok.Data;

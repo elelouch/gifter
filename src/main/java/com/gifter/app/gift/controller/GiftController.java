@@ -1,7 +1,9 @@
 package com.gifter.app.gift.controller;
 
+import com.gifter.app.gift.dto.UpdateGiftsDto;
 import com.gifter.app.gift.entity.Gift;
 import com.gifter.app.gift.service.GiftService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +22,7 @@ public class GiftController {
         return giftService.getCurrentUserGifts();
     }
 
-    public void updateUserGifts(List<Gift> giftList) {
+    public void updateUserGifts(@Valid UpdateGiftsDto giftList) {
         giftService.updateCurrentUserGifts(giftList);
     }
 

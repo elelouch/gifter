@@ -1,5 +1,6 @@
 package com.gifter.app.user.service;
 
+import com.gifter.app.user.dto.FindUserDto;
 import com.gifter.app.user.dto.GifterUserDto;
 import com.gifter.app.user.dto.UpdateUserDto;
 import com.gifter.app.user.entity.GifterUser;
@@ -11,7 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,7 +22,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
 
     private GifterUser getCurrentUser() {
         return (GifterUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -33,12 +34,12 @@ public class UserServiceImpl implements UserService {
         String currentUserUsername = current.getUsername();
         Optional<GifterUser> optionalUser = userRepository.findByEmailOrUsername(userDto.getEmail(), userDto.getUsername());
 
-        if(optionalUser.isPresent()) {
+        if (optionalUser.isPresent()) {
             GifterUser user = optionalUser.get();
-            if(user.getEmail().equals(currentUserEmail)) {
+            if (user.getEmail().equals(currentUserEmail)) {
                 throw new EmailAlreadyInUse();
             }
-            if(user.getUsername().equals(currentUserUsername)) {
+            if (user.getUsername().equals(currentUserUsername)) {
                 throw new UsernameAlreadyInUse();
             }
         }
@@ -57,4 +58,11 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(false);
         userRepository.save(user);
     }
+
+    @Override
+    public List<GifterUserDto> findUsers(FindUserDto dto) {
+        List<GifterUser> users = userRepository.findByUsernameLike(dto.getUsername());
+        return GifterUserDto.fromEntity(users);
+    }
+
 }

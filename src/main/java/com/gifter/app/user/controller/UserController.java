@@ -1,10 +1,12 @@
 package com.gifter.app.user.controller;
 
 import com.gifter.app.gift.entity.Gift;
+import com.gifter.app.user.dto.FindUserDto;
 import com.gifter.app.user.dto.GifterUserDto;
-import com.gifter.app.gift.dto.UpdateGiftsDto;
+import com.gifter.app.user.dto.UpdateUserDto;
 import com.gifter.app.user.entity.GifterUser;
 import com.gifter.app.user.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -23,14 +25,18 @@ public class UserController {
         return GifterUserDto.fromEntity(user);
     }
 
-    @GetMapping("gifts")
-    public List<Gift> getUserGifts(@PathVariable Long id) {
-        return userService.getUserGifts();
+    @GetMapping
+    public List<GifterUserDto> getUsers(FindUserDto dto) {
+        return userService.findUsers(dto);
     }
 
-    @PostMapping("gifts")
-    public void postUserGifts(UpdateGiftsDto giftsDto) {
-        userService.updateGifts(giftsDto);
+    @DeleteMapping
+    public void deleteUser() {
+        userService.deleteUser();
     }
 
+    @PutMapping
+    public GifterUserDto updateUserDto(@Valid @RequestBody UpdateUserDto updateUserDto) {
+        return userService.updateUser(updateUserDto);
+    }
 }

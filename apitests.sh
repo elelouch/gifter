@@ -83,6 +83,12 @@ api_test_authenticated (){
     esac
 }
 
+api_auth() {
+    token=$1
+    user_id=$2
+    action=$3
+}
+
 if [ "$1" = "auth" ]; then
     api_test_authenticated $2
 else 

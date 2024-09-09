@@ -1,6 +1,9 @@
 package com.gifter.app.request.follow;
 
-import com.gifter.app.user.dto.GifterUserDto;
+import com.gifter.app.request.follow.dto.FollowRequestDto;
+import com.gifter.app.request.follow.dto.UserFollowRequestDto;
+import com.gifter.app.request.follow.entity.FollowRequest;
+import com.gifter.app.request.follow.repository.FollowRequestRepository;
 import com.gifter.app.user.entity.GifterUser;
 import com.gifter.app.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

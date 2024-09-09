@@ -2,11 +2,9 @@ package com.gifter.app.auth.controller;
 
 import com.gifter.app.auth.dto.AuthResponse;
 import com.gifter.app.auth.dto.LoginDto;
-import com.gifter.app.auth.service.AuthService;
-import com.gifter.app.user.entity.GifterUser;
 import com.gifter.app.auth.dto.RegisterDto;
+import com.gifter.app.auth.service.AuthService;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,16 +23,6 @@ public class AuthController {
     @PostMapping("register")
     public ResponseEntity<AuthResponse> registerUseCase(@Valid @RequestBody RegisterDto userDto) {
         return ResponseEntity.ok(authService.registerUseCase(userDto));
-    }
-
-    @GetMapping("test")
-    public String pedro() {
-        return "Testing endpoint";
-    }
-
-    @GetMapping("authenticated")
-    public String test() {
-        return "This user is authenticated";
     }
 
 }

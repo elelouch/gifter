@@ -1,4 +1,4 @@
-package com.gifter.app.request.follow;
+package com.gifter.app.request.follow.entity;
 
 import com.gifter.app.user.entity.GifterUser;
 import jakarta.persistence.*;

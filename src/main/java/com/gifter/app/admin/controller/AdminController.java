@@ -12,13 +12,14 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @PostMapping
+    @PostMapping("user")
     public GifterUserDto updateUser(@Valid GifterUserDto userDto) {
         return adminService.updateUser(userDto);
     }
 
-    @DeleteMapping("${id}")
-    public void deleteUser(@PathVariable  Long id) {
+    @DeleteMapping("user/{id}")
+    public void deleteUser(@PathVariable Long id) {
         adminService.deleteUser(id);
     }
+
 }
