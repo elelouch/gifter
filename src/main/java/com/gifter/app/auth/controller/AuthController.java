@@ -15,7 +15,7 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @GetMapping("login")
+    @PostMapping("login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginDto loginDto) {
         return ResponseEntity.ok(authService.loginUseCase(loginDto));
     }

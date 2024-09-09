@@ -34,7 +34,7 @@ public class GiftServiceImpl implements GiftService {
     @Override
     public List<Gift> getCurrentUserGifts() {
         GifterUser user = getCurrentUser();
-        return new ArrayList<>(user.getGifts());
+        return new ArrayList<>(userRepository.findById(user.getId()).get().getGifts());
     }
 
     private GifterUser getCurrentUser() {

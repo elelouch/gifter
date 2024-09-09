@@ -13,7 +13,7 @@ public class AdminController {
     private AdminService adminService;
 
     @PostMapping("user")
-    public GifterUserDto updateUser(@Valid GifterUserDto userDto) {
+    public GifterUserDto updateUser(@Valid @RequestBody GifterUserDto userDto) {
         return adminService.updateUser(userDto);
     }
 

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AdminServiceImpl implements AdminService {
     @Autowired
@@ -28,5 +30,11 @@ public class AdminServiceImpl implements AdminService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+    @Override
+    public List<GifterUserDto> getUsers() {
+        return GifterUserDto.fromEntity(userRepository.findAll());
+    }
+
 }
 

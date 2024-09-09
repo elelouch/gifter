@@ -33,6 +33,7 @@ public class GifterUserDto {
     @Email
     @NotNull
     private String email;
+    @NotNull
     private Role role;
 
     public static GifterUserDto fromEntity(GifterUser entity) {

@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping
-    public List<GifterUserDto> getUsers(FindUserDto dto) {
+    public List<GifterUserDto> getUsers(@Valid @RequestBody FindUserDto dto) {
         return userService.findUsers(dto);
     }
 
