@@ -1,57 +1,60 @@
 package com.gifter.app.user.service;
 
-import com.gifter.app.gift.entity.Gift;
-import com.gifter.app.request.follow.FollowRequest;
-import com.gifter.app.request.follow.FollowRequestDto;
-import com.gifter.app.request.follow.FollowRequestRepository;
 import com.gifter.app.user.dto.GifterUserDto;
+import com.gifter.app.user.dto.UpdateUserDto;
 import com.gifter.app.user.entity.GifterUser;
+import com.gifter.app.user.error.EmailAlreadyInUse;
+import com.gifter.app.user.error.UsernameAlreadyInUse;
 import com.gifter.app.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private FollowRequestRepository followRequestRepository;
+    private UserRepository userRepository;
 
-    public List<GifterUserDto> getUsers() {
-        return GifterUserDto.fromEntity(userRepository.findAll());
+
+    private GifterUser getCurrentUser() {
+        return (GifterUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     @Override
-    public void createFollowRequest(FollowRequestDto followRequestDto) {
-        GifterUser origin = userRepository.getReferenceById(followRequestDto.getUserId());
-        GifterUser destiny = userRepository.getReferenceById(followRequestDto.getDestinationId());
-        FollowRequest fr = new FollowRequest();
-        fr.setUserOrigin(origin);
-        fr.setUserDestination(destiny);
-        fr.setDate(new Date());
-        followRequestRepository.save(fr);
+    public GifterUserDto updateUser(UpdateUserDto userDto) {
+        GifterUser current = getCurrentUser();
+        String currentUserEmail = current.getEmail();
+        String currentUserUsername = current.getUsername();
+        Optional<GifterUser> optionalUser = userRepository.findByEmailOrUsername(userDto.getEmail(), userDto.getUsername());
+
+        if(optionalUser.isPresent()) {
+            GifterUser user = optionalUser.get();
+            if(user.getEmail().equals(currentUserEmail)) {
+                throw new EmailAlreadyInUse();
+            }
+            if(user.getUsername().equals(currentUserUsername)) {
+                throw new UsernameAlreadyInUse();
+            }
+        }
+
+        current.setEmail(userDto.getEmail());
+        current.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        current.setFirstName(userDto.getFirstName());
+        current.setLastName(userDto.getLastName());
+        current.setUsername(userDto.getUsername());
+        return GifterUserDto.fromEntity(current);
     }
 
     @Override
-    public void removeFollowRequest(Long id) {
-        followRequestRepository.deleteById(id);
-    }
-
-    @Override
-    public void updateGifts(UpdateGiftsDto dto) {
-        GifterUser user = userRepository.findById(dto.getId()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        user.setGifts(dto.getGifts());
+    public void deleteUser() {
+        GifterUser user = getCurrentUser();
+        user.setEnabled(false);
         userRepository.save(user);
-    }
-
-    @Override
-    public Set<Gift> getUserGifts(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found")).getGifts();
     }
 }

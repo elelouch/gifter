@@ -51,6 +51,11 @@ public class AuthServiceImpl implements AuthService {
         if(!encoder.matches(loginDto.getPassword(), user.getPassword())) {
             throw new IncorrectPasswordException();
         }
+
+        if(!user.isEnabled()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
         return new AuthResponse(jwtService.generateToken(user));
     }
 
