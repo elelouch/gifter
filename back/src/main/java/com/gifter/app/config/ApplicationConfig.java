@@ -29,4 +29,5 @@ public class ApplicationConfig {
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findById(Long.parseLong(username)).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+
 }

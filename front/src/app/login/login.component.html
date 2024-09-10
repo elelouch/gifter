@@ -1,0 +1,24 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <div>
+    <div>
+      <p>Don't have an account yet? Sign Up</p>
+    </div>
+
+    <div>
+      <label for="">Email</label>
+      <input type="text" formControlName="email">
+    </div>
+
+    <div>
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password">
+    </div>
+    <button type="submit" [disabled]="!loginForm.valid">Submit</button>
+  </div>
+</form>
+<div>
+  <button (click)="getAllUsers()">Get all users! (Log in first)</button>
+  @for(user of currentUsers; track user.username){
+    <li>{{user.username}}<li>
+  }
+</div>

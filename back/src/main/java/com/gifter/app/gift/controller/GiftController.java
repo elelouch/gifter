@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("gift")
+@CrossOrigin
 public class GiftController {
     Logger logger = LoggerFactory.getLogger(GiftController.class);
 

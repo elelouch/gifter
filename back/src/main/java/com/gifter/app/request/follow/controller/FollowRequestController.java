@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("follow")
+@CrossOrigin
 public class FollowRequestController {
     @Autowired
     private FollowRequestService followRequestService;
