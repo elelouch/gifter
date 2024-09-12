@@ -8,3 +8,4 @@ export interface User {
     email: string;
     role:string;
 }
+export const USER_LOCAL_STORAGE_KEY="currentUser"

@@ -1,1 +1,29 @@
-<p>user works!</p>
+<div>
+  @if(user$ | async; as user) {
+    <div>
+      <span>{{user.username}}</span>
+    </div>
+    <div>
+      <span>{{user.firstName}}</span>
+      <span>{{user.lastName}}</span>
+    </div>
+    <div>
+      <span>Gifts</span>
+      <ul>
+        @for(gift of gifts$ | async; track gift.id) {
+          <li>
+            <span>{{gift.name}}</span>
+            <div>
+              <span><img [src]="gift.imageUrl" alt="Gift image"></span>
+              <span>{{gift.location}}</span>
+            </div>
+          </li>
+        }
+      </ul>
+    </div>
+    <div>
+      <button>Add gift</button>
+      <button>Save changes</button>
+    </div>
+  }
+</div>
