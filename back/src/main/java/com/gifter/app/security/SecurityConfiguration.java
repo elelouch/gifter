@@ -21,7 +21,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
 
-        http.authorizeHttpRequests(authz -> authz.requestMatchers("/auth/test", "/auth/register", "/auth/login", "/h2console").permitAll().anyRequest().authenticated());
+        http.authorizeHttpRequests(authz -> authz.requestMatchers("/auth/register", "/auth/login").permitAll().anyRequest().authenticated());
 
         http.sessionManagement(session -> {
             session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
