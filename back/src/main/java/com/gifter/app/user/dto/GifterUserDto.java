@@ -33,11 +33,14 @@ public class GifterUserDto {
     @Email
     @NotNull
     private String email;
+
     @NotNull
     private Role role;
 
     public static GifterUserDto fromEntity(GifterUser entity) {
         GifterUserDto dto = new GifterUserDto();
+        dto.setLastName(entity.getLastName());
+        dto.setFirstName(entity.getFirstName());
         dto.setId(entity.getId());
         dto.setEmail(entity.getEmail());
         dto.setUsername(entity.getUsername());

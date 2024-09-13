@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserAuth } from './user.auth';
-import { Observable, map, BehaviorSubject, catchError, of, EMPTY, throwError, retry } from 'rxjs';
+import { Observable, map, BehaviorSubject, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { USER_LOCAL_STORAGE_KEY, User } from '../user/user';
 import { UserLogin } from '../user/user.login';

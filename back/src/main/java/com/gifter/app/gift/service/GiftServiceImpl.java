@@ -23,18 +23,23 @@ public class GiftServiceImpl implements GiftService {
     private GiftRepository giftRepository;
 
     @Override
-    public void updateCurrentUserGifts(UpdateGiftsDto dto) {
+    public UpdateGiftsDto updateCurrentUserGifts(UpdateGiftsDto dto) {
+        UpdateGiftsDto updatedGifts = new UpdateGiftsDto();
         GifterUser user = getCurrentUser();
         Set<Gift> giftsSet = new HashSet<>(dto.getList()); // remove duplicates
         Set<Gift> updatedSet = new HashSet<>(giftRepository.saveAll(giftsSet));
         user.setGifts(updatedSet);
         userRepository.save(user);
+        dto.setList(new ArrayList<>(updatedSet));
+        return updatedGifts;
     }
 
     @Override
-    public List<Gift> getCurrentUserGifts() {
+    public UpdateGiftsDto getCurrentUserGifts() {
+        UpdateGiftsDto giftsDto = new UpdateGiftsDto();
         GifterUser user = getCurrentUser();
-        return new ArrayList<>(userRepository.findById(user.getId()).get().getGifts());
+        giftsDto.setList(new ArrayList<>(userRepository.findById(user.getId()).get().getGifts()));
+        return giftsDto;
     }
 
     private GifterUser getCurrentUser() {

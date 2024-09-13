@@ -6,6 +6,7 @@ import com.gifter.app.auth.dto.RegisterDto;
 import com.gifter.app.auth.errors.IncorrectPasswordException;
 import com.gifter.app.auth.errors.UserAlreadyCreatedException;
 import com.gifter.app.security.jwt.JwtService;
+import com.gifter.app.user.dto.GifterUserDto;
 import com.gifter.app.user.entity.GifterUser;
 import com.gifter.app.user.entity.Role;
 import com.gifter.app.user.repository.UserRepository;
@@ -26,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
     private PasswordEncoder encoder;
 
     @Override
-    public AuthResponse registerUseCase(RegisterDto userRegisterDto) {
+    public GifterUserDto registerUseCase(RegisterDto userRegisterDto) {
         String email = userRegisterDto.getEmail();
         String username = userRegisterDto.getUsername();
 
@@ -42,9 +43,7 @@ public class AuthServiceImpl implements AuthService {
         user.setRole(Role.USER);
         user.setEnabled(true);
 
-        userRepository.save(user);
-
-        return new AuthResponse(jwtService.generateToken(user));
+        return GifterUserDto.fromEntity(userRepository.save(user));
     }
 
     public AuthResponse loginUseCase(LoginDto loginDto) {

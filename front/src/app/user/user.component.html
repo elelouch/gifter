@@ -9,8 +9,9 @@
     </div>
     <div>
       <span>Gifts</span>
+      <app-gift [hidden]="false" (onNewGift)="addGift($event.value)"></app-gift>
       <ul>
-        @for(gift of gifts$ | async; track gift.id) {
+        @for(gift of giftSubject | async; track gift.id) {
           <li>
             <span>{{gift.name}}</span>
             <div>
@@ -23,7 +24,7 @@
     </div>
     <div>
       <button>Add gift</button>
-      <button>Save changes</button>
+      <button (click)="applyGiftsUpdate()">Save changes</button>
     </div>
   }
 </div>
