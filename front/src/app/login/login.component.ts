@@ -1,21 +1,39 @@
 import { Component } from '@angular/core';
-import { FormBuilder,  FormGroup, FormsModule,  ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
 import { AdminService } from '../admin/admin.service';
-import { EMPTY, Observable, catchError, firstValueFrom, isEmpty, map } from 'rxjs';
+import {
+  EMPTY,
+  Observable,
+  catchError,
+  firstValueFrom,
+  isEmpty,
+  map,
+} from 'rxjs';
 import { UserAuth } from '../auth/user.auth';
-import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+} from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, RouterLinkActive, RouterLink],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  loginForm: FormGroup
-  login$?: Observable<UserAuth>
+  loginForm: FormGroup;
+  login$?: Observable<UserAuth>;
 
   constructor(
     private fb: FormBuilder,
@@ -23,16 +41,19 @@ export class LoginComponent {
     private admin: AdminService,
     private router: Router,
     private route: ActivatedRoute
-  ){
+  ) {
     this.loginForm = this.fb.group({
-      email: ["", [Validators.maxLength(255), Validators.minLength(3),Validators.email]],
-      password: ["", [Validators.maxLength(255), Validators.minLength(3)]],
-    })
+      email: [
+        '',
+        [Validators.maxLength(255), Validators.minLength(3), Validators.email],
+      ],
+      password: ['', [Validators.maxLength(255), Validators.minLength(3)]],
+    });
   }
 
   onSubmit() {
-    this.authService.login(this.loginForm.getRawValue()).subscribe(() =>{
-      this.router.navigate(["/user"]);        
+    this.authService.login(this.loginForm.getRawValue()).subscribe(() => {
+      this.router.navigate(['/user']);
     });
   }
 }
