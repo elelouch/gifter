@@ -3,13 +3,13 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Gift } from './gift';
 import { UpdateGift } from './update.gift';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GiftService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getCurrentGifts() {
     const url = `${environment.apiUrl}/gift`;
@@ -18,7 +18,7 @@ export class GiftService {
 
   updateGifts(gifts: Gift[]) {
     const url = `${environment.apiUrl}/gift`;
-    const body = { list: gifts }
+    const body = { list: gifts };
     return this.http.post<UpdateGift>(url, body);
   }
 }

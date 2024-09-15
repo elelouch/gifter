@@ -1,5 +1,34 @@
-<form [formGroup]="giftFormGroup">
-    <div><label for=""></label><input type="text"></div>
-    <div><label for=""></label><input type="text"></div>
-    <div><label for=""></label><input type="text"></div>
-</form>
+<div>
+  <form [hidden]="!displayForm" [formGroup]="giftFormGroup" id="gift-form">
+    <span>Gift</span>
+    <div>
+      <label for="name">Name</label
+      ><input id="name" formControlName="name" type="text" />
+    </div>
+    <div>
+      <label for="location">Location</label
+      ><input id="location" formControlName="location" type="text" />
+    </div>
+    <div>
+      <label for="imageUrl">Image Url</label
+      ><input id="imageUrl" formControlName="imageUrl" type="text" />
+    </div>
+    <button>Add</button>
+    <button (click)="closeForm(); $event.preventDefault()">Close</button>
+  </form>
+  <ul>
+    @for(gift of giftsSubject | async; track gift.id) {
+    <li>
+      <span>{{ gift.name }}</span>
+      <div>
+        <span><img [src]="gift.imageUrl" alt="Gift image" /></span>
+        <span>{{ gift.location }}</span>
+      </div>
+    </li>
+    }
+  </ul>
+  <div>
+    <button (click)="openForm()">Add gift</button>
+    <button (click)="applyChanges()">Apply changes</button>
+  </div>
+</div>

@@ -7,24 +7,6 @@
       <span>{{user.firstName}}</span>
       <span>{{user.lastName}}</span>
     </div>
-    <div>
-      <span>Gifts</span>
-      <app-gift [hidden]="false" (onNewGift)="addGift($event.value)"></app-gift>
-      <ul>
-        @for(gift of giftSubject | async; track gift.id) {
-          <li>
-            <span>{{gift.name}}</span>
-            <div>
-              <span><img [src]="gift.imageUrl" alt="Gift image"></span>
-              <span>{{gift.location}}</span>
-            </div>
-          </li>
-        }
-      </ul>
-    </div>
-    <div>
-      <button>Add gift</button>
-      <button (click)="applyGiftsUpdate()">Save changes</button>
-    </div>
+    <app-gift></app-gift>
   }
 </div>

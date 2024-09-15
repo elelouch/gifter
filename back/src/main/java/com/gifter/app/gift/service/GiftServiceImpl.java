@@ -5,13 +5,15 @@ import com.gifter.app.gift.entity.Gift;
 import com.gifter.app.gift.repository.GiftRepository;
 import com.gifter.app.user.entity.GifterUser;
 import com.gifter.app.user.repository.UserRepository;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -30,7 +32,7 @@ public class GiftServiceImpl implements GiftService {
         Set<Gift> updatedSet = new HashSet<>(giftRepository.saveAll(giftsSet));
         user.setGifts(updatedSet);
         userRepository.save(user);
-        dto.setList(new ArrayList<>(updatedSet));
+        updatedGifts.setList(new ArrayList<>(updatedSet));
         return updatedGifts;
     }
 
