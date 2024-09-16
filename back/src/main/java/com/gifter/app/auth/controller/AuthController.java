@@ -21,9 +21,9 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginDto loginDto) {
+    public AuthResponse login(@Valid @RequestBody LoginDto loginDto) {
         logger.info("login request received");
-        return ResponseEntity.ok(authService.loginUseCase(loginDto));
+        return authService.loginUseCase(loginDto);
     }
 
     @PostMapping("register")

@@ -26,6 +26,11 @@ public class UserController {
         return GifterUserDto.fromEntity(user);
     }
 
+    @GetMapping("{username}")
+    public GifterUserDto getByUsername(@PathVariable String username) {
+        return userService.findByUsername(username);
+    }
+
     @GetMapping
     public List<GifterUserDto> getUsers(@Valid @RequestBody FindUserDto dto) {
         return userService.findUsers(dto);

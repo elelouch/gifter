@@ -12,4 +12,7 @@ public interface UserService {
     void deleteUser();
 
     List<GifterUserDto> findUsers(FindUserDto dto);
+
+    GifterUserDto findByUsername(String username);
+
 }

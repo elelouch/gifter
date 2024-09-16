@@ -56,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        return new AuthResponse(jwtService.generateToken(user));
+        return new AuthResponse(jwtService.generateToken(user), user.getUsername());
     }
 
 }

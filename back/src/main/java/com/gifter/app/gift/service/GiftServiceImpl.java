@@ -1,14 +1,10 @@
 package com.gifter.app.gift.service;
 
-import com.gifter.app.gift.dto.GiftDto;
 import com.gifter.app.gift.dto.UpdateGiftsDto;
 import com.gifter.app.gift.entity.Gift;
 import com.gifter.app.gift.repository.GiftRepository;
 import com.gifter.app.user.entity.GifterUser;
 import com.gifter.app.user.repository.UserRepository;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -60,7 +56,13 @@ public class GiftServiceImpl implements GiftService {
         giftFound.setName(gift.getName());
         giftFound.setImageUrl(gift.getImageUrl());
         giftFound.setLocation(gift.getLocation());
-        return giftRepository.save(giftFound);
+        Gift giftSaved = giftRepository.save(giftFound);
+        GifterUser curr = userRepository.findById(getCurrentUser().getId()).get();
+        Set<Gift> gifts = curr.getGifts();
+        gifts.add(giftSaved);
+        curr.setGifts(gifts);
+        userRepository.save(curr);
+        return giftSaved;
     }
 
 }

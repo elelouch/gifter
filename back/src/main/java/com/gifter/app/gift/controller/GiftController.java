@@ -4,10 +4,13 @@ import com.gifter.app.gift.dto.UpdateGiftsDto;
 import com.gifter.app.gift.entity.Gift;
 import com.gifter.app.gift.service.GiftService;
 import jakarta.validation.Valid;
+import org.hibernate.sql.Update;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("gift")
@@ -21,7 +24,9 @@ public class GiftController {
     @GetMapping("list")
     public UpdateGiftsDto getUserGifts() {
         logger.info("get user gifts request");
-        return giftService.getCurrentUserGifts();
+        UpdateGiftsDto gifts = giftService.getCurrentUserGifts();
+        logger.info("List size: "+gifts.getList().size());
+        return gifts;
     }
 
     @PostMapping("list")

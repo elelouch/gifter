@@ -9,6 +9,7 @@ import com.gifter.app.user.error.UsernameAlreadyInUse;
 import com.gifter.app.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -65,4 +66,9 @@ public class UserServiceImpl implements UserService {
         return GifterUserDto.fromEntity(users);
     }
 
+    @Override
+    public GifterUserDto findByUsername(String username) {
+        GifterUser user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User does not exists"));
+        return GifterUserDto.fromEntity(user);
+    }
 }
