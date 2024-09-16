@@ -1,1 +1,15 @@
-<p>search works!</p>
+<div>
+  <div>
+    <label for="friend-search">Search</label>
+    <input id="friend-search" type="text" [formControl]="userInput">
+  </div>
+  <ol>
+    @for(user of usersFound$ | async; track user.id) {
+        <li>
+          <span><a (click)="redirectToProfile(user.username)" >user.username</a></span>
+          <span>user.firstName</span>
+          <span>user.lastName</span>
+        </li>
+    }
+  </ol>
+</div>

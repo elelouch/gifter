@@ -7,28 +7,29 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
-import { AdminService } from '../admin/admin.service';
 import {
-  Observable,
+    BehaviorSubject,
+    catchError,
+    map,
+    of,
 } from 'rxjs';
-import { UserAuth } from '../auth/user.auth';
 import {
-  ActivatedRoute,
   Router,
   RouterLink,
   RouterLinkActive,
 } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, RouterLinkActive, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, RouterLinkActive, RouterLink, AsyncPipe],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  login$?: Observable<UserAuth>;
+  loginMessage$: BehaviorSubject<string>
 
   constructor(
     private fb: FormBuilder,
@@ -42,11 +43,18 @@ export class LoginComponent {
       ],
       password: ['', [Validators.maxLength(255), Validators.minLength(3)]],
     });
+    this.loginMessage$ = new BehaviorSubject('');
   }
 
   onSubmit() {
-    this.authService.login(this.loginForm.getRawValue()).subscribe((user) => {
-      this.router.navigate(['/user', user.username]);
-    });
+    this.authService.login(this.loginForm.getRawValue()).pipe(map((user) => {
+      this.router.navigate(['app', 'user', user.username]);
+      return "";
+    }), catchError((error,catchs) => {
+      console.log(error, catchs);
+      return of("Error during login process, check if credentials are right.");
+    })).subscribe(msg => {
+      this.loginMessage$.next(msg);
+    })
   }
 }

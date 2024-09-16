@@ -8,33 +8,44 @@ import { FollowersComponent } from './friend/followers/followers.component';
 import { FollowingComponent } from './friend/following/following.component';
 import { SearchComponent } from './friend/search/search.component';
 import { FriendComponent } from './friend/friend.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   {
-    path: 'user/:id',
-    component: UserComponent,
+    path: 'app',
     canActivate: [authGuard],
-  },
-  {
-    path: 'friends',
-    component: FriendComponent,
+    component: NavbarComponent,
     children:[
       {
-        path:'following',
-        component: FollowingComponent
+        path: 'user/:id',
+        component: UserComponent,
       },
       {
-        path:'followers',
-        component: FollowersComponent
+        path: 'friends',
+        component: FriendComponent,
+        children:[
+          {
+            path:'following',
+            component: FollowingComponent
+          },
+          {
+            path:'followers',
+            component: FollowersComponent
+          },
+          {
+            path: 'search',
+            component: SearchComponent
+          }
+        ]
       },
-      {
-        path: 'search',
-        component: SearchComponent
-      }
-    ]
+    ],
   },
-  { path: '', redirectTo: '/login', pathMatch: 'full'},
+  {
+    path: '',
+    redirectTo: '/login',
+    pathMatch: 'full',
+  },
   { path: '**', component: NotFoundComponent }
 ];

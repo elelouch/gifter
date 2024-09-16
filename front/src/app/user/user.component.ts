@@ -5,13 +5,12 @@ import { Observable, map, switchMap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GiftComponent } from '../gift/gift.component';
-import { NavbarComponent } from '../navbar/navbar.component';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, GiftComponent, NavbarComponent, RouterOutlet ],
+  imports: [AsyncPipe, FormsModule, GiftComponent, RouterOutlet ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css',
 })
@@ -19,7 +18,7 @@ export class UserComponent {
   user$: Observable<User>;
   isOwner = false
 
-  constructor(private userService: UserService, route: ActivatedRoute) {
+  constructor(userService: UserService, route: ActivatedRoute) {
     this.user$ = route.params.pipe(switchMap(params => {
       const selectedUsername = params['id'];
       return userService.getByUsername(selectedUsername);

@@ -31,8 +31,8 @@ public class UserController {
         return userService.findByUsername(username);
     }
 
-    @GetMapping
-    public List<GifterUserDto> getUsers(@Valid @RequestBody FindUserDto dto) {
+    @PostMapping("filter")
+    public List<GifterUserDto> getUsers(@RequestBody FindUserDto dto) {
         return userService.findUsers(dto);
     }
 

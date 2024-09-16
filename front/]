@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { BehaviorSubject, catchError, map, of } from 'rxjs';
+import { BehaviorSubject, catchError, map } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
@@ -14,7 +14,7 @@ import { AsyncPipe } from '@angular/common';
 })
 export class RegisterComponent {
   registerForm: FormGroup
-  creationMessage$: BehaviorSubject<string>
+  creationMessage: BehaviorSubject<string>
 
   constructor(fb: FormBuilder, private auth: AuthService, private route: ActivatedRoute, private router: Router) {
     this.registerForm = fb.group({
@@ -24,21 +24,21 @@ export class RegisterComponent {
       password: ["", Validators.required],
       email: ["", Validators.required],
     })
-    this.creationMessage$ = new BehaviorSubject('');
+    this.creationMessage = new BehaviorSubject('');
   }
 
   onSubmit() {
     const dto = this.registerForm.getRawValue();
     this.auth.register(dto).pipe(map((userRegistered) => {
       setTimeout(() => {
-        this.router.navigate(['..','login'], {relativeTo: this.route})
-      }, 5 * 1000)
-      return `Email: ${userRegistered.email} registered succesfully. You're about to be redirected to login in 5s.`
+        this.router.navigate(['login'], {relativeTo: this.route})
+      }, 1 * 1000)
+      return `User: ${userRegistered.username} created succesfully. You're about to be redirected to login`
     }), catchError((error, caught) => {
       console.log(error, caught);
-      return of('Error on registration, check if constraints are met');
+      return `Error while updating the user, check if sent user is valid`;
     })).subscribe((message) => {
-      this.creationMessage$.next(message);
+      this.creationMessage.next(message);
     })
   }
 }
