@@ -1,5 +1,10 @@
 <div>
-  <form [hidden]="!displayForm" [formGroup]="giftFormGroup" id="gift-form">
+  <form
+    [hidden]="!displayForm"
+    [formGroup]="giftFormGroup"
+    id="gift-form"
+    (ngSubmit)="onSubmit()"
+  >
     <span>Gift</span>
     <div>
       <label for="name">Name</label
@@ -24,11 +29,14 @@
         <span><img [src]="gift.imageUrl" alt="Gift image" /></span>
         <span>{{ gift.location }}</span>
       </div>
+      <div>
+        <button (click)="updateGift(gift.id)">Update</button>
+        <button (click)="removeGift(gift.id)">Remove</button>
+      </div>
     </li>
     }
   </ul>
   <div>
     <button (click)="openForm()">Add gift</button>
-    <button (click)="applyChanges()">Apply changes</button>
   </div>
 </div>

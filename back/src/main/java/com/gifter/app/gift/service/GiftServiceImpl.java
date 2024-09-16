@@ -1,5 +1,6 @@
 package com.gifter.app.gift.service;
 
+import com.gifter.app.gift.dto.GiftDto;
 import com.gifter.app.gift.dto.UpdateGiftsDto;
 import com.gifter.app.gift.entity.Gift;
 import com.gifter.app.gift.repository.GiftRepository;
@@ -46,6 +47,20 @@ public class GiftServiceImpl implements GiftService {
 
     private GifterUser getCurrentUser() {
         return (GifterUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    @Override
+    public void removeGift(Long id) {
+        giftRepository.deleteById(id);
+    }
+
+    @Override
+    public Gift updateGift(Gift gift) {
+        Gift giftFound = giftRepository.findById(gift.getId()).orElse(new Gift());
+        giftFound.setName(gift.getName());
+        giftFound.setImageUrl(gift.getImageUrl());
+        giftFound.setLocation(gift.getLocation());
+        return giftRepository.save(giftFound);
     }
 
 }

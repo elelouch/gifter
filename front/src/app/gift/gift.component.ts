@@ -40,43 +40,41 @@ export class GiftComponent {
   onSubmit() {
     const gift: Gift = this.giftFormGroup.getRawValue();
     this.displayForm = false;
-    this.addGift();
+    this.addGift(gift);
     this.giftFormGroup.reset();
+    this.giftFormGroup.setValue({ id: 0 });
   }
 
-  applyChanges() {
-    this.giftService
-      .updateGifts(this.giftsSubject.getValue())
-      .subscribe((updt) => {
-        this.giftsSubject.next(updt.list);
-      });
+  addGift(gift: Gift) {
+    this.giftService.updateGift(gift).subscribe((giftUpdated) => {
+      console.log('gift added/receivied', giftUpdated);
+      const found = this.findById(giftUpdated.id);
+      if (found) {
+        found.imageUrl = giftUpdated.imageUrl;
+        found.location = giftUpdated.location;
+        found.name = giftUpdated.name;
+      } else {
+        const currList = this.giftsSubject.getValue();
+        currList.push(giftUpdated);
+        this.giftsSubject.next(currList);
+      }
+    });
   }
 
-  private addGift() {
-    const giftList = this.giftsSubject.value;
-    giftList.push(gift);
-    this.giftsSubject.next(giftList);
+  findById(id: number) {
+    return this.giftsSubject.getValue().find((curr) => curr.id === id);
   }
 
-  findGift(gift: Gift) {
-    const giftList = this.giftsSubject.value;
-    return gift.id != 0
-      ? giftList.find((curr) => curr.id == gift.id)
-      : giftList.find(
-          (curr) =>
-            curr.imageUrl === gift.imageUrl &&
-            curr.name === gift.name &&
-            curr.location === gift.location
-        );
+  removeGift(id: number) {
+    this.giftService.deleteGift(id).subscribe(() => {
+      console.log('gift succesfully removed');
+    });
   }
 
-  editGift(gift: Gift) {
-    const giftFound = this.findGift(gift);
-    if (giftFound) {
-      giftFound.imageUrl = gift.imageUrl;
-      giftFound.location = gift.location;
-      giftFound.name = gift.name;
-    }
+  updateGift(id: number) {
+    const found = this.findById(id)!;
+    this.giftFormGroup.setValue(found);
+    this.openForm();
   }
 
   openForm() {
