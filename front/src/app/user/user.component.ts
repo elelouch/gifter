@@ -1,22 +1,35 @@
 import { Component } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from './user';
-import { BehaviorSubject, map, Observable } from 'rxjs';
-import { Gift } from '../gift/gift';
+import { Observable, map, switchMap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { GiftComponent } from '../gift/gift.component';
+import { NavbarComponent } from '../navbar/navbar.component';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, GiftComponent],
+  imports: [AsyncPipe, FormsModule, GiftComponent, NavbarComponent, RouterOutlet ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css',
 })
 export class UserComponent {
-  user$?: Observable<User>;
-  constructor(private userService: UserService) {
-    this.user$ = this.userService.getCurrentUser();
+  user$: Observable<User>;
+  isOwner = false
+
+  constructor(private userService: UserService, route: ActivatedRoute) {
+    this.user$ = route.params.pipe(switchMap(params => {
+      const selectedUsername = params['id'];
+      return userService.getByUsername(selectedUsername);
+    }), map(curr => {
+      userService.getCurrentUser().subscribe((logged) => {
+        this.isOwner = logged.email === curr.email &&
+          logged.id === curr.id &&
+          logged.username === curr.username;
+      })
+      return curr;
+    }))
   }
 }

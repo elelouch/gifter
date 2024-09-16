@@ -1,12 +1,15 @@
 <div>
   @if(user$ | async; as user) {
+    <app-navbar></app-navbar>
     <div>
       <span>{{user.username}}</span>
     </div>
     <div>
-      <span>{{user.firstName}}</span>
-      <span>{{user.lastName}}</span>
+      <span>{{user.firstName}} {{user.lastName}}</span>
     </div>
-    <app-gift></app-gift>
+    @if(isOwner) {
+      <p>You are the man</p>
+    }
+    <app-gift [isOwner]="isOwner"></app-gift>
   }
 </div>

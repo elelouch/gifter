@@ -15,4 +15,9 @@ export class UserService {
     return this.http.get<User>(url)
   }
 
+  getByUsername(username: string) {
+    const url = `${environment.apiUrl}/user/${username}`
+    return this.http.get<User>(url);
+  }
+
 }

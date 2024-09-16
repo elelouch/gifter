@@ -29,14 +29,18 @@
         <span><img [src]="gift.imageUrl" alt="Gift image" /></span>
         <span>{{ gift.location }}</span>
       </div>
-      <div>
-        <button (click)="updateGift(gift.id)">Update</button>
-        <button (click)="removeGift(gift.id)">Remove</button>
-      </div>
+      @if(isOwner) {
+        <div>
+          <button (click)="updateGift(gift.id)">Update</button>
+          <button (click)="removeGiftById(gift.id)">Remove</button>
+        </div>
+      }
     </li>
     }
   </ul>
   <div>
-    <button (click)="openForm()">Add gift</button>
+    @if(isOwner) {
+      <button (click)="openForm()">Add gift</button>
+    }
   </div>
 </div>

@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Gift } from './gift';
 import { UpdateGift } from './update.gift';
-import { BehaviorSubject } from 'rxjs';
-import { GiftDto } from './gift.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +23,6 @@ export class GiftService {
 
   updateGift(gift: Gift) {
     const url = `${environment.apiUrl}/gift`;
-    console.log('sending gift', gift);
     return this.http.post<Gift>(url, gift);
   }
 

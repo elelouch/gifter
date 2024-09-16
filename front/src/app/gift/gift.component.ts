@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,9 +6,8 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { Gift } from './gift';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { GiftService } from './gift.service';
-import { UpdateGift } from './update.gift';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
@@ -22,6 +21,7 @@ export class GiftComponent {
   giftsSubject: BehaviorSubject<Gift[]>;
   displayForm: boolean;
   giftFormGroup: FormGroup;
+  @Input() isOwner = false;
 
   constructor(private fb: FormBuilder, private giftService: GiftService) {
     this.giftFormGroup = this.fb.group({
@@ -31,10 +31,10 @@ export class GiftComponent {
       name: [''],
     });
     this.displayForm = false;
+    this.giftsSubject = new BehaviorSubject<Gift[]>([]);
     this.giftService.getCurrentGifts().subscribe((updt) => {
       this.giftsSubject.next(updt.list);
     });
-    this.giftsSubject = new BehaviorSubject<Gift[]>([]);
   }
 
   onSubmit() {
@@ -42,12 +42,11 @@ export class GiftComponent {
     this.displayForm = false;
     this.addGift(gift);
     this.giftFormGroup.reset();
-    this.giftFormGroup.setValue({ id: 0 });
+    this.giftFormGroup.patchValue({id: '0'});
   }
 
   addGift(gift: Gift) {
     this.giftService.updateGift(gift).subscribe((giftUpdated) => {
-      console.log('gift added/receivied', giftUpdated);
       const found = this.findById(giftUpdated.id);
       if (found) {
         found.imageUrl = giftUpdated.imageUrl;
@@ -61,13 +60,20 @@ export class GiftComponent {
     });
   }
 
-  findById(id: number) {
+  findById(id: number){
     return this.giftsSubject.getValue().find((curr) => curr.id === id);
   }
 
-  removeGift(id: number) {
+  removeGiftById(id: number) {
     this.giftService.deleteGift(id).subscribe(() => {
-      console.log('gift succesfully removed');
+      const list = this.giftsSubject.getValue();
+      for(let i = 0; i < list.length; i++) {
+        if (list[i].id === id) {
+          list.splice(i, 1)
+          break;
+        }
+      }
+      this.giftsSubject.next(list);
     });
   }
 

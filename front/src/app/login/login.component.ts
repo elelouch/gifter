@@ -9,12 +9,7 @@ import {
 import { AuthService } from '../auth/auth.service';
 import { AdminService } from '../admin/admin.service';
 import {
-  EMPTY,
   Observable,
-  catchError,
-  firstValueFrom,
-  isEmpty,
-  map,
 } from 'rxjs';
 import { UserAuth } from '../auth/user.auth';
 import {
@@ -38,9 +33,7 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private admin: AdminService,
     private router: Router,
-    private route: ActivatedRoute
   ) {
     this.loginForm = this.fb.group({
       email: [
@@ -52,8 +45,8 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    this.authService.login(this.loginForm.getRawValue()).subscribe(() => {
-      this.router.navigate(['/user']);
+    this.authService.login(this.loginForm.getRawValue()).subscribe((user) => {
+      this.router.navigate(['/user', user.username]);
     });
   }
 }

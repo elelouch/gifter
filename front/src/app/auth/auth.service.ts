@@ -31,7 +31,7 @@ export class AuthService {
                 sessionStorage.setItem(USER_LOCAL_STORAGE_KEY, JSON.stringify(userAuth));
                 this.userBehaviorSubject.next(userAuth);
                 this.isLoggedIn = true
-                return of(userAuth);
+                return userAuth;
       }))
       // local storage solo puede tener strings hay que usar JSON.stringify aca
       // y JSON.parse en otro lado si se quiere ir pasando objetos
