@@ -22,7 +22,7 @@
     <button (click)="closeForm(); $event.preventDefault()">Close</button>
   </form>
   <ul>
-    @if(isFriend) {
+    @if(isFriend || isOwner) {
       @for(gift of giftsSubject | async; track gift.id) {
       <li>
         <span>{{ gift.name }}</span>
