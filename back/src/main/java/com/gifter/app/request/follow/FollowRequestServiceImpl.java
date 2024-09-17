@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class FollowRequestServiceImpl implements FollowRequestService{
+public class FollowRequestServiceImpl implements FollowRequestService {
     @Autowired
     private UserRepository userRepository;
 
@@ -35,14 +35,21 @@ public class FollowRequestServiceImpl implements FollowRequestService{
     }
 
     @Override
-    public void createFollowRequest(FollowRequestDto followRequestDto) {
+    public UserFollowRequestDto createFollowRequest(FollowRequestDto followRequestDto) {
         GifterUser origin = getCurrentUser();
         GifterUser destiny = userRepository.getReferenceById(followRequestDto.getDestination());
         FollowRequest fr = new FollowRequest();
         fr.setUserOrigin(origin);
         fr.setUserDestination(destiny);
         fr.setDate(new Date());
-        followRequestRepository.save(fr);
+        return UserFollowRequestDto.fromEntity(followRequestRepository.save(fr));
+    }
+
+    @Override
+    public UserFollowRequestDto getFollowRequest(Long destinationId) {
+        Long currentId = getCurrentUser().getId();
+        FollowRequest fr = followRequestRepository.findByOrigAndDestId(currentId, destinationId).orElseThrow();
+        return UserFollowRequestDto.fromEntity(fr);
     }
 
     @Override

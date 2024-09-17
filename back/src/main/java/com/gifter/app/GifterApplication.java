@@ -12,9 +12,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 @SpringBootApplication
 public class GifterApplication {
-    Logger logger = LoggerFactory.getLogger(GifterApplication.class);
     @Autowired
     private PasswordEncoder encoder;
 
@@ -35,8 +36,26 @@ public class GifterApplication {
             admin.setEnabled(true);
             admin.setRole(Role.ADMIN);
 
-            repository.save(admin);
-            logger.info("admin initialized");
+
+            GifterUser elo = new GifterUser();
+            elo.setPassword(encoder.encode("admin123"));
+            elo.setFirstName("Elias");
+            elo.setLastName("Rojas");
+            elo.setEmail("elo@gifter.com");
+            elo.setUsername("elo01");
+            elo.setEnabled(true);
+            elo.setRole(Role.USER);
+
+            GifterUser nana = new GifterUser();
+            nana.setFirstName("Nany");
+            nana.setLastName("Doxxed");
+            nana.setPassword(encoder.encode("admin123"));
+            nana.setEmail("nana@gifter.com");
+            nana.setUsername("nana09");
+            nana.setEnabled(true);
+            nana.setRole(Role.USER);
+
+            repository.saveAll(List.of(elo,nana, admin));
         };
     }
 }

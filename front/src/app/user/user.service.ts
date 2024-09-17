@@ -20,4 +20,8 @@ export class UserService {
     return this.http.get<User>(url);
   }
 
+  getByLikeUsername(username: string) {
+    const url = `${environment.apiUrl}/user/filter`;
+    return this.http.post<User[]>(url, {username})
+  }
 }

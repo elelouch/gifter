@@ -17,8 +17,13 @@ public class FollowRequestController {
     private FollowRequestService followRequestService;
 
     @PostMapping()
-    public void createFollowRequest(@Valid @RequestBody FollowRequestDto followRequest) {
-        followRequestService.createFollowRequest(followRequest);
+    public UserFollowRequestDto createFollowRequest(@Valid @RequestBody FollowRequestDto followRequest) {
+        return followRequestService.createFollowRequest(followRequest);
+    }
+
+    @GetMapping("/destination/{id}")
+    public UserFollowRequestDto getFollowRequest(@PathVariable Long destinationId) {
+        return followRequestService.getFollowRequest(destinationId);
     }
 
     @DeleteMapping("{id}")

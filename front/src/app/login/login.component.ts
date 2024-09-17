@@ -19,6 +19,7 @@ import {
   RouterLinkActive,
 } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -50,9 +51,10 @@ export class LoginComponent {
     this.authService.login(this.loginForm.getRawValue()).pipe(map((user) => {
       this.router.navigate(['app', 'user', user.username]);
       return "";
-    }), catchError((error,catchs) => {
-      console.log(error, catchs);
-      return of("Error during login process, check if credentials are right.");
+    }), catchError((error: HttpErrorResponse,catchs) => {
+      console.log(error);
+      const errBody = error.error
+      return of(`${errBody.reason ?? errBody.detail} Check if credentials are right.`);
     })).subscribe(msg => {
       this.loginMessage$.next(msg);
     })

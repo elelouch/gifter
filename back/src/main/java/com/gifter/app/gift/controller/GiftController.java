@@ -23,10 +23,7 @@ public class GiftController {
 
     @GetMapping("list")
     public UpdateGiftsDto getUserGifts() {
-        logger.info("get user gifts request");
-        UpdateGiftsDto gifts = giftService.getCurrentUserGifts();
-        logger.info("List size: "+gifts.getList().size());
-        return gifts;
+        return giftService.getCurrentUserGifts();
     }
 
     @PostMapping("list")

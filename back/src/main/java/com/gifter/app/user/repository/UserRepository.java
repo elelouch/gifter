@@ -14,6 +14,6 @@ public interface UserRepository extends JpaRepository<GifterUser, Long> {
     Optional<GifterUser> findByEmailOrUsername(String email, String username);
     Optional<GifterUser> findByEmail(String email);
     Optional<GifterUser> findByUsername(String username);
-    @Query("select gf from GifterUser gf where gf.username like '%:username%' and gf.role <> 'admin'")
-    List<GifterUser> findByUsernameLike(@Param("username") String username);
+    @Query("select gf from GifterUser gf where gf.username like %:username% and gf.role <> 'admin'")
+    List<GifterUser> getByLikeUsername(@Param("username") String username);
 }

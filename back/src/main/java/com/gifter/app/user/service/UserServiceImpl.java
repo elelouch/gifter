@@ -7,6 +7,8 @@ import com.gifter.app.user.entity.GifterUser;
 import com.gifter.app.user.error.EmailAlreadyInUse;
 import com.gifter.app.user.error.UsernameAlreadyInUse;
 import com.gifter.app.user.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +22,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -62,7 +66,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<GifterUserDto> findUsers(FindUserDto dto) {
-        List<GifterUser> users = userRepository.findByUsernameLike(dto.getUsername());
+        List<GifterUser> users = userRepository.getByLikeUsername(dto.getUsername());
+        logger.info("Users list length: "+ users.size());
         return GifterUserDto.fromEntity(users);
     }
 

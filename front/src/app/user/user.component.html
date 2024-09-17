@@ -6,8 +6,12 @@
     <div>
       <span>{{user.firstName}} {{user.lastName}}</span>
     </div>
-    @if(isOwner) {
-      <p>You are the man</p>
+    @if(!isOwner) {
+      @if(requestAlreadySent$ | async; as friendRequest) {
+          <button (click)="deleteFriendRequest(friendRequest.id)">Cancel Request</button>
+        } @else {
+          <button (click)="sendFriendRequest(user.id)">Friend Request</button>
+        }
     }
     <app-gift [isOwner]="isOwner"></app-gift>
   }
