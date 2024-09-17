@@ -1,6 +1,7 @@
 package com.gifter.app.user.service;
 
 import com.gifter.app.user.dto.FindUserDto;
+import com.gifter.app.user.dto.FollowersDto;
 import com.gifter.app.user.dto.GifterUserDto;
 import com.gifter.app.user.dto.UpdateUserDto;
 import com.gifter.app.user.entity.GifterUser;
@@ -61,7 +62,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public FollowersDto getFollowing() {
+        return userRepository.findById(getCurrentUser().getId()).map(user -> {
+            List<GifterUserDto> list = GifterUserDto.fromEntity(List.copyOf(user.getFollowing()));
+            FollowersDto dto = new FollowersDto();
+            dto.setList(list);
+            return dto;
+        }).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    @Override
+    public FollowersDto getFollowers() {
+        return userRepository.findById(getCurrentUser().getId()).map(user -> {
+            List<GifterUserDto> list = GifterUserDto.fromEntity(List.copyOf(user.getFollowers()));
+            FollowersDto dto = new FollowersDto();
+            dto.setList(list);
+            return dto;
+        }).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    @Override
     public GifterUserDto findByUsername(String username) {
-        return userRepository.findByUsername(username).map(GifterUserDto::fromEntity).orElseThrow(() -> new UsernameNotFoundException("User does not exists"));
+        return userRepository.findByUsername(username).map(GifterUserDto::fromEntity)
+                .orElseThrow(() -> new UsernameNotFoundException("User does not exists"));
     }
 }

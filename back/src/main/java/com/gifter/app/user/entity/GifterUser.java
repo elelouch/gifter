@@ -1,11 +1,12 @@
 package com.gifter.app.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gifter.app.gift.entity.Gift;
-import com.gifter.app.request.follow.entity.FollowRequest;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,11 +31,13 @@ public class GifterUser implements UserDetails {
     private String lastName;
     private String email;
 
-    @ManyToMany(mappedBy = "followers")
+    @EqualsAndHashCode.Exclude
+    @ManyToMany
+    @JoinTable(name = "following_followers", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "following_id"))
     private Set<GifterUser> following;
 
-    @ManyToMany
-    @JoinTable(name = "following_followers", joinColumns = {@JoinColumn(name = "following_id")}, inverseJoinColumns = {@JoinColumn(name = "follower_id")})
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "following")
     private Set<GifterUser> followers;
 
     @OneToMany

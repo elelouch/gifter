@@ -1,1 +1,7 @@
-<p>followers works!</p>
+<div>
+  <ul>
+    @for(user of followers$ | async; track user.id) {
+      <li><a>{{user.username}}</a></li>
+    }
+  </ul>
+</div>

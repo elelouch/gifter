@@ -2,6 +2,7 @@ package com.gifter.app.user.controller;
 
 import com.gifter.app.gift.entity.Gift;
 import com.gifter.app.user.dto.FindUserDto;
+import com.gifter.app.user.dto.FollowersDto;
 import com.gifter.app.user.dto.GifterUserDto;
 import com.gifter.app.user.dto.UpdateUserDto;
 import com.gifter.app.user.entity.GifterUser;
@@ -44,5 +45,15 @@ public class UserController {
     @PutMapping
     public GifterUserDto updateUserDto(@Valid @RequestBody UpdateUserDto updateUserDto) {
         return userService.updateUser(updateUserDto);
+    }
+
+    @GetMapping("followers")
+    public FollowersDto getFollowers (){
+        return userService.getFollowers();
+    }
+
+    @GetMapping("following")
+    public FollowersDto getFollowing(){
+        return userService.getFollowing();
     }
 }

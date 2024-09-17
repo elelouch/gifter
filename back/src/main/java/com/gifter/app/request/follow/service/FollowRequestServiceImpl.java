@@ -26,6 +26,8 @@ public class FollowRequestServiceImpl implements FollowRequestService {
     @Autowired
     private FollowRequestRepository followRequestRepository;
 
+    Logger logger = LoggerFactory.getLogger(FollowRequestServiceImpl.class);
+
     @Override
     public void removeFollowRequest(Long id) {
         FollowRequest followRequest = followRequestRepository.findById(id).orElseThrow(FollowRequestNotFound::new);
@@ -67,9 +69,10 @@ public class FollowRequestServiceImpl implements FollowRequestService {
     @Override
     public void useFollowRequest(Long id) {
         FollowRequest followRequest = followRequestRepository.findById(id).orElseThrow(FollowRequestNotFound::new);
-        GifterUser origin = followRequest.getUserOrigin();
-        origin.getFollowing().add(followRequest.getUserDestination());
-        followRequest.setUsed(true);
+        GifterUser orig = followRequest.getUserOrigin();
+        GifterUser dest = followRequest.getUserDestination();
+        orig.getFollowing().add(dest);
+        dest.getFollowers().add(orig);
         followRequestRepository.save(followRequest);
     }
 

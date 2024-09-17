@@ -1,6 +1,7 @@
 package com.gifter.app.user.service;
 
 import com.gifter.app.user.dto.FindUserDto;
+import com.gifter.app.user.dto.FollowersDto;
 import com.gifter.app.user.dto.GifterUserDto;
 import com.gifter.app.user.dto.UpdateUserDto;
 
@@ -12,6 +13,10 @@ public interface UserService {
     void deleteUser();
 
     List<GifterUserDto> findUsers(FindUserDto dto);
+
+    FollowersDto getFollowing();
+
+    FollowersDto getFollowers();
 
     GifterUserDto findByUsername(String username);
 
