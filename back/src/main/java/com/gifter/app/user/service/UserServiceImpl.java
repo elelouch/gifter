@@ -4,8 +4,8 @@ import com.gifter.app.user.dto.FindUserDto;
 import com.gifter.app.user.dto.GifterUserDto;
 import com.gifter.app.user.dto.UpdateUserDto;
 import com.gifter.app.user.entity.GifterUser;
-import com.gifter.app.user.error.EmailAlreadyInUse;
-import com.gifter.app.user.error.UsernameAlreadyInUse;
+import com.gifter.app.user.error.EmailAlreadyInUseException;
+import com.gifter.app.user.error.UsernameAlreadyInUseException;
 import com.gifter.app.user.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,15 +16,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
     @Autowired
     private UserRepository userRepository;
 
@@ -35,20 +32,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public GifterUserDto updateUser(UpdateUserDto userDto) {
         GifterUser current = getCurrentUser();
-        String currentUserEmail = current.getEmail();
-        String currentUserUsername = current.getUsername();
-        Optional<GifterUser> optionalUser = userRepository.findByEmailOrUsername(userDto.getEmail(), userDto.getUsername());
-
-        if (optionalUser.isPresent()) {
-            GifterUser user = optionalUser.get();
-            if (user.getEmail().equals(currentUserEmail)) {
-                throw new EmailAlreadyInUse();
+        userRepository.findByEmailOrUsername(userDto.getEmail(), userDto.getUsername()).ifPresent(user -> {
+            if (user.getEmail().equals(current.getEmail())) {
+                throw new EmailAlreadyInUseException();
             }
-            if (user.getUsername().equals(currentUserUsername)) {
-                throw new UsernameAlreadyInUse();
+            if (user.getUsername().equals(current.getUsername())) {
+                throw new UsernameAlreadyInUseException();
             }
-        }
-
+        });
         current.setEmail(userDto.getEmail());
         current.setPassword(passwordEncoder.encode(userDto.getPassword()));
         current.setFirstName(userDto.getFirstName());
@@ -66,14 +57,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<GifterUserDto> findUsers(FindUserDto dto) {
-        List<GifterUser> users = userRepository.getByLikeUsername(dto.getUsername());
-        logger.info("Users list length: "+ users.size());
-        return GifterUserDto.fromEntity(users);
+        return GifterUserDto.fromEntity(userRepository.getByLikeUsername(dto.getUsername()));
     }
 
     @Override
     public GifterUserDto findByUsername(String username) {
-        GifterUser user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User does not exists"));
-        return GifterUserDto.fromEntity(user);
+        return userRepository.findByUsername(username).map(GifterUserDto::fromEntity).orElseThrow(() -> new UsernameNotFoundException("User does not exists"));
     }
 }

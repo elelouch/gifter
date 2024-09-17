@@ -1,10 +1,10 @@
 <div>
   <nav>
-    <ol>
+    <ul>
       <li><a (click)="logout()" routerLink="/login" routerLinkActive="activate" ariaCurrentWhenActive="page">Logout</a></li>
       <li><a [routerLink]="mainUsernamePath" routerLinkActive="activate">Home</a></li>
       <li><a [routerLink]="friendsRoute" routerLinkActive="activate" ariaCurrentWhenActive="page">Friends</a></li>
-    </ol>
+    </ul>
   </nav>
   <router-outlet></router-outlet>
 </div>

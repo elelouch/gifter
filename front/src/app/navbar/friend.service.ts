@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { User } from '../user/user';
 import { FriendRequest } from '../friend/friend.request';
+import { PendingFollows } from '../friend/pending.follows';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ import { FriendRequest } from '../friend/friend.request';
 export class FriendService {
   constructor(private http: HttpClient) {}
 
-  friendRequest(destination: number) {
+  sendFriendRequest(destination: number) {
     const url = `${environment.apiUrl}/follow`;
     return this.http.post<FriendRequest>(url, {destination});
   }
@@ -23,5 +23,15 @@ export class FriendService {
   checkFriendRequest(destination: number) {
     const url = `${environment.apiUrl}/follow/destination/${destination}`;
     return this.http.get<FriendRequest>(url);
+  }
+
+  getPendingRequests() {
+    const url = `${environment.apiUrl}/follow`;
+    return this.http.get<PendingFollows>(url);
+  }
+
+  useFriendRequest(requestId: number) {
+    const url = `${environment.apiUrl}/follow/${requestId}`;
+    return this.http.post(url, {});
   }
 }

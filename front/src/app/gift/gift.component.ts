@@ -67,12 +67,8 @@ export class GiftComponent {
   removeGiftById(id: number) {
     this.giftService.deleteGift(id).subscribe(() => {
       const list = this.giftsSubject.getValue();
-      for(let i = 0; i < list.length; i++) {
-        if (list[i].id === id) {
-          list.splice(i, 1)
-          break;
-        }
-      }
+      const i = list.findIndex((curr) => curr.id === id)
+      list.splice(i,  1);
       this.giftsSubject.next(list);
     });
   }

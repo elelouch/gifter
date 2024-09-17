@@ -2,10 +2,12 @@ package com.gifter.app.gift.dto;
 
 import com.gifter.app.gift.entity.Gift;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
+@Builder
 @Data
 public class UpdateGiftsDto {
     @NotNull

@@ -47,16 +47,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public AuthResponse loginUseCase(LoginDto loginDto) {
-        GifterUser user = userRepository.findByEmail(loginDto.getEmail()).orElseThrow(() -> new UsernameNotFoundException("Email does not exist"));
-        if(!encoder.matches(loginDto.getPassword(), user.getPassword())) {
-            throw new IncorrectPasswordException();
-        }
+        return userRepository.findByEmail(loginDto.getEmail()).map(user -> {
+            if (!encoder.matches(loginDto.getPassword(), user.getPassword())) throw new IncorrectPasswordException();
 
-        if(!user.isEnabled()) {
-            throw new UsernameNotFoundException("User not found");
-        }
+            if (!user.isEnabled()) throw new UsernameNotFoundException("User not found");
 
-        return new AuthResponse(jwtService.generateToken(user), user.getUsername());
+            return new AuthResponse(jwtService.generateToken(user), user.getUsername());
+        }).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 
 }

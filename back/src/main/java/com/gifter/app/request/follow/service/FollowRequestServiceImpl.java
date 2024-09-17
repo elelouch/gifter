@@ -1,6 +1,7 @@
-package com.gifter.app.request.follow;
+package com.gifter.app.request.follow.service;
 
 import com.gifter.app.request.follow.dto.FollowRequestDto;
+import com.gifter.app.request.follow.dto.PendingFollowRequestDto;
 import com.gifter.app.request.follow.dto.UserFollowRequestDto;
 import com.gifter.app.request.follow.entity.FollowRequest;
 import com.gifter.app.request.follow.repository.FollowRequestRepository;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Service
 public class FollowRequestServiceImpl implements FollowRequestService {
@@ -24,14 +25,16 @@ public class FollowRequestServiceImpl implements FollowRequestService {
 
     @Override
     public void removeFollowRequest(Long id) {
-        userRepository.deleteById(id);
+        followRequestRepository.deleteById(id);
     }
 
     @Override
-    public List<UserFollowRequestDto> getUserFollowRequests() {
+    public PendingFollowRequestDto getUserFollowRequests() {
         GifterUser current = getCurrentUser();
-        List<FollowRequest> requests = followRequestRepository.findUserFollowRequests(current.getId());
-        return UserFollowRequestDto.fromEntity(requests);
+        List<UserFollowRequestDto> pendingFollows = UserFollowRequestDto.fromEntity(followRequestRepository.findUserFollowRequests(current.getId()));
+        PendingFollowRequestDto pending = new PendingFollowRequestDto();
+        pending.setPendingList(pendingFollows);
+        return pending;
     }
 
     @Override
@@ -46,26 +49,18 @@ public class FollowRequestServiceImpl implements FollowRequestService {
     }
 
     @Override
-    public UserFollowRequestDto getFollowRequest(Long destinationId) {
+    public Optional<UserFollowRequestDto> getFollowRequest(Long destinationId) {
         Long currentId = getCurrentUser().getId();
-        FollowRequest fr = followRequestRepository.findByOrigAndDestId(currentId, destinationId).orElseThrow();
-        return UserFollowRequestDto.fromEntity(fr);
+        return followRequestRepository.findByOrigAndDestId(currentId, destinationId).map(UserFollowRequestDto::fromEntity);
     }
 
     @Override
     public void useFollowRequest(Long id) {
-        FollowRequest followRequest = followRequestRepository.findById(id).orElseThrow();
-        GifterUser origin = followRequest.getUserOrigin();
-        GifterUser destination = followRequest.getUserDestination();
-
-        Set<GifterUser> originFollowing = origin.getFollowing();
-        Set<GifterUser> destinationFollowers = destination.getFollowers();
-
-        originFollowing.add(destination);
-        destinationFollowers.add(origin);
-
-        userRepository.save(origin);
-        userRepository.save(destination);
+        followRequestRepository.findById(id).ifPresent(followRequest -> {
+            GifterUser origin = followRequest.getUserOrigin();
+            origin.getFollowing().add(followRequest.getUserDestination());
+            userRepository.save(origin);
+        });
     }
 
     private GifterUser getCurrentUser() {

@@ -2,7 +2,10 @@ package com.gifter.app.request.follow.entity;
 
 import com.gifter.app.user.entity.GifterUser;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 
@@ -12,9 +15,9 @@ public class FollowRequest {
     @Id
     @GeneratedValue
     private Long id;
-    @OneToOne
+    @ManyToOne
     private GifterUser userOrigin;
-    @OneToOne
+    @ManyToOne
     private GifterUser userDestination;
     private Date date;
 }

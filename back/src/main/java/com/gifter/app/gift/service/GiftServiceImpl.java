@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -23,22 +24,19 @@ public class GiftServiceImpl implements GiftService {
 
     @Override
     public UpdateGiftsDto updateCurrentUserGifts(UpdateGiftsDto dto) {
-        UpdateGiftsDto updatedGifts = new UpdateGiftsDto();
         GifterUser user = getCurrentUser();
         Set<Gift> giftsSet = new HashSet<>(dto.getList()); // remove duplicates
         Set<Gift> updatedSet = new HashSet<>(giftRepository.saveAll(giftsSet));
         user.setGifts(updatedSet);
         userRepository.save(user);
-        updatedGifts.setList(new ArrayList<>(updatedSet));
-        return updatedGifts;
+        return UpdateGiftsDto.builder().list(List.copyOf(updatedSet)).build();
     }
 
     @Override
     public UpdateGiftsDto getCurrentUserGifts() {
-        UpdateGiftsDto giftsDto = new UpdateGiftsDto();
-        GifterUser user = getCurrentUser();
-        giftsDto.setList(new ArrayList<>(userRepository.findById(user.getId()).get().getGifts()));
-        return giftsDto;
+        Long currentUserId = getCurrentUser().getId();
+        List<Gift> giftList = List.copyOf(userRepository.findById(currentUserId).get().getGifts());
+        return UpdateGiftsDto.builder().list(giftList).build();
     }
 
     private GifterUser getCurrentUser() {
@@ -57,7 +55,9 @@ public class GiftServiceImpl implements GiftService {
         giftFound.setImageUrl(gift.getImageUrl());
         giftFound.setLocation(gift.getLocation());
         Gift giftSaved = giftRepository.save(giftFound);
+
         GifterUser curr = userRepository.findById(getCurrentUser().getId()).get();
+
         Set<Gift> gifts = curr.getGifts();
         gifts.add(giftSaved);
         curr.setGifts(gifts);

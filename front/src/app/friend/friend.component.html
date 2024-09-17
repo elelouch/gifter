@@ -1,9 +1,22 @@
 <div>
-  <ol>
+  <ul>
     <li><a>Search</a></li>
     <li><a>Following</a></li>
     <li><a>Followers</a></li>
-    <li><a>Follow Requests</a></li>
-  </ol>
+  </ul>
+  <div>
+    <span>Follow Requests</span>
+    <ol>
+      @for(req of followRequests$ | async; track req.id) {
+        <li>
+          <a [routerLink]="['/app','user',req.requester.username]">{{req.requester.username}}</a>
+          <div>
+            <button (click)="useRequest(req.id)">Accept</button>
+            <button (click)="deleteRequest(req.id)">Remove</button>
+          </div>
+        </li>
+      }
+   </ol>
+     </div>
   <router-outlet></router-outlet>
 </div>

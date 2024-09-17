@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FriendService } from '../../navbar/friend.service';
 
 @Component({
   selector: 'app-followers',
@@ -8,5 +9,4 @@ import { Component } from '@angular/core';
   styleUrl: './followers.component.css'
 })
 export class FollowersComponent {
-
 }

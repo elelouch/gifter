@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from './user';
-import { BehaviorSubject, Observable, map, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, tap, switchMap, catchError, EMPTY, map } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GiftComponent } from '../gift/gift.component';
@@ -22,23 +22,30 @@ export class UserComponent {
   requestAlreadySent$: BehaviorSubject<FriendRequest | null>
 
   constructor(userService: UserService, route: ActivatedRoute, private friendService: FriendService) {
+    this.requestAlreadySent$ = new BehaviorSubject<FriendRequest | null>(null);
+
     this.user$ = route.params.pipe(switchMap(params => {
       const selectedUsername = params['id'];
       return userService.getByUsername(selectedUsername);
-    }), map(curr => {
+    }), tap(curr => {
       userService.getCurrentUser().subscribe((logged) => {
         this.isOwner = logged.email === curr.email &&
           logged.id === curr.id &&
           logged.username === curr.username;
       })
-      return curr;
+    }), tap(curr => {
+      this.friendService.checkFriendRequest(curr.id).pipe(map(followReq =>{
+        this.requestAlreadySent$.next(followReq);
+      }), catchError(()=>{
+        this.requestAlreadySent$.next(null);
+        return EMPTY
+        })).subscribe();
     }))
 
-    this.requestAlreadySent$ = new BehaviorSubject<FriendRequest | null>(null);
   }
 
   sendFriendRequest(userId: number) {
-    this.friendService.friendRequest(Number(userId)).subscribe((friendReq) => {
+    this.friendService.sendFriendRequest(Number(userId)).subscribe((friendReq) => {
       this.requestAlreadySent$.next(friendReq)
     })
   }
