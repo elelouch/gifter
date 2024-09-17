@@ -22,6 +22,7 @@ export class GiftComponent {
   displayForm: boolean;
   giftFormGroup: FormGroup;
   @Input() isOwner = false;
+  @Input() isFriend = false;
 
   constructor(private fb: FormBuilder, private giftService: GiftService) {
     this.giftFormGroup = this.fb.group({

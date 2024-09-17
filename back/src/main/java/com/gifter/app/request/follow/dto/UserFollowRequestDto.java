@@ -11,11 +11,13 @@ import java.util.List;
 @Data
 public class UserFollowRequestDto {
     private GifterUserDto requester;
+    private boolean used;
     private Long id;
 
     public static UserFollowRequestDto fromEntity(FollowRequest followRequest) {
         GifterUser user = followRequest.getUserOrigin();
         UserFollowRequestDto dto = new UserFollowRequestDto();
+        dto.setUsed(followRequest.isUsed());
         dto.setRequester(GifterUserDto.fromEntity(user));
         dto.setId(followRequest.getId());
         return dto;

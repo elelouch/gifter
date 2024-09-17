@@ -3,7 +3,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FriendService } from '../navbar/friend.service';
 import { AsyncPipe } from '@angular/common';
 import { FriendRequest } from './friend.request';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 
 @Component({
   selector: 'app-friend',

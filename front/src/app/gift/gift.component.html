@@ -22,20 +22,22 @@
     <button (click)="closeForm(); $event.preventDefault()">Close</button>
   </form>
   <ul>
-    @for(gift of giftsSubject | async; track gift.id) {
-    <li>
-      <span>{{ gift.name }}</span>
-      <div>
-        <span><img [src]="gift.imageUrl" alt="Gift image" /></span>
-        <span>{{ gift.location }}</span>
-      </div>
-      @if(isOwner) {
+    @if(isFriend) {
+      @for(gift of giftsSubject | async; track gift.id) {
+      <li>
+        <span>{{ gift.name }}</span>
         <div>
-          <button (click)="updateGift(gift.id)">Update</button>
-          <button (click)="removeGiftById(gift.id)">Remove</button>
+          <span><img [src]="gift.imageUrl" alt="Gift image" /></span>
+          <span>{{ gift.location }}</span>
         </div>
+        @if(isOwner) {
+          <div>
+            <button (click)="updateGift(gift.id)">Update</button>
+            <button (click)="removeGiftById(gift.id)">Remove</button>
+          </div>
+        }
+      </li>
       }
-    </li>
     }
   </ul>
   <div>

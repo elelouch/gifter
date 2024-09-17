@@ -8,11 +8,17 @@
     </div>
     @if(!isOwner) {
       @if(requestAlreadySent$ | async; as friendRequest) {
-          <button (click)="deleteFriendRequest(friendRequest.id)">Cancel Request</button>
+          <button (click)="deleteFriendRequest(friendRequest.id)">
+            @if(friendRequest.used){
+              Stop Following
+            } @else {
+              Cancel Follow Request
+            }
+          </button>
         } @else {
           <button (click)="sendFriendRequest(user.id)">Friend Request</button>
         }
     }
-    <app-gift [isOwner]="isOwner"></app-gift>
+    <app-gift [isOwner]="isOwner" [isFriend]="isFriend"></app-gift>
   }
 </div>

@@ -18,8 +18,9 @@ import { FriendRequest } from '../friend/friend.request';
 })
 export class UserComponent {
   user$: Observable<User>;
-  isOwner = false
-  requestAlreadySent$: BehaviorSubject<FriendRequest | null>
+  isOwner = false;
+  isFriend = false;
+  requestAlreadySent$: BehaviorSubject<FriendRequest | null>;
 
   constructor(userService: UserService, route: ActivatedRoute, private friendService: FriendService) {
     this.requestAlreadySent$ = new BehaviorSubject<FriendRequest | null>(null);
@@ -34,7 +35,8 @@ export class UserComponent {
           logged.username === curr.username;
       })
     }), tap(curr => {
-      this.friendService.checkFriendRequest(curr.id).pipe(map(followReq =>{
+      this.friendService.checkFriendRequest(curr.id).pipe(tap(followReq =>{
+        this.isFriend = followReq.used;
         this.requestAlreadySent$.next(followReq);
       }), catchError(()=>{
         this.requestAlreadySent$.next(null);

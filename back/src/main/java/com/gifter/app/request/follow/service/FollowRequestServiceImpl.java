@@ -4,9 +4,12 @@ import com.gifter.app.request.follow.dto.FollowRequestDto;
 import com.gifter.app.request.follow.dto.PendingFollowRequestDto;
 import com.gifter.app.request.follow.dto.UserFollowRequestDto;
 import com.gifter.app.request.follow.entity.FollowRequest;
+import com.gifter.app.request.follow.error.FollowRequestNotFound;
 import com.gifter.app.request.follow.repository.FollowRequestRepository;
 import com.gifter.app.user.entity.GifterUser;
 import com.gifter.app.user.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -25,7 +28,14 @@ public class FollowRequestServiceImpl implements FollowRequestService {
 
     @Override
     public void removeFollowRequest(Long id) {
-        followRequestRepository.deleteById(id);
+        FollowRequest followRequest = followRequestRepository.findById(id).orElseThrow(FollowRequestNotFound::new);
+        if (followRequest.isUsed()) {
+            GifterUser origin = followRequest.getUserOrigin();
+            GifterUser destination = followRequest.getUserDestination();
+            origin.getFollowers().removeIf(curr -> curr.equals(destination));
+            userRepository.save(origin);
+        }
+        followRequestRepository.delete(followRequest);
     }
 
     @Override
@@ -56,11 +66,11 @@ public class FollowRequestServiceImpl implements FollowRequestService {
 
     @Override
     public void useFollowRequest(Long id) {
-        followRequestRepository.findById(id).ifPresent(followRequest -> {
-            GifterUser origin = followRequest.getUserOrigin();
-            origin.getFollowing().add(followRequest.getUserDestination());
-            userRepository.save(origin);
-        });
+        FollowRequest followRequest = followRequestRepository.findById(id).orElseThrow(FollowRequestNotFound::new);
+        GifterUser origin = followRequest.getUserOrigin();
+        origin.getFollowing().add(followRequest.getUserDestination());
+        followRequest.setUsed(true);
+        followRequestRepository.save(followRequest);
     }
 
     private GifterUser getCurrentUser() {

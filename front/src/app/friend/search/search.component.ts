@@ -21,7 +21,7 @@ export class SearchComponent {
     this.usersFound$ = new BehaviorSubject<User[]>([]);
     this.userInput = new FormControl('');
     this.userInput.valueChanges.subscribe(val => {
-      this.getByLikeUsername(val);
+      if(val.length > 3) this.getByLikeUsername(val);
     })
   }
 

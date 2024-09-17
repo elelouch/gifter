@@ -19,5 +19,6 @@ public class FollowRequest {
     private GifterUser userOrigin;
     @ManyToOne
     private GifterUser userDestination;
+    private boolean used;
     private Date date;
 }

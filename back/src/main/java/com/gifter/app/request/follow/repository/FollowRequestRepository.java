@@ -12,9 +12,10 @@ import java.util.Optional;
 @Repository
 public interface FollowRequestRepository extends JpaRepository<FollowRequest, Long> {
     // Which requests came to me
-    @Query("select fr from FollowRequest fr where fr.userDestination.id = :userId")
+    @Query("select fr from FollowRequest fr where fr.userDestination.id = :userId and not fr.used")
     List<FollowRequest> findUserFollowRequests(@Param("userId")Long userId);
-    @Query("select fr from FollowRequest fr where fr.userDestination.id = :dest and fr.userOrigin.id = :orig")
+
+    @Query("select fr from FollowRequest fr where fr.userOrigin.id = :orig and fr.userDestination.id = :dest")
     Optional<FollowRequest> findByOrigAndDestId(@Param("orig")Long origId, @Param("dest")Long destId);
 
 }
