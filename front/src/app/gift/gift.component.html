@@ -18,8 +18,8 @@
       <label for="imageUrl">Image Url</label
       ><input id="imageUrl" formControlName="imageUrl" type="text" />
     </div>
-    <button>Add</button>
-    <button (click)="closeForm(); $event.preventDefault()">Close</button>
+    <button [disabled]="!giftFormGroup.valid">Submit</button>
+    <button (click)="displayForm = false; $event.preventDefault()">Close</button>
   </form>
   <ul>
     @if((isFriend$ | async) || isLogged) {
@@ -42,7 +42,7 @@
   </ul>
   <div>
     @if(isLogged) {
-      <button (click)="openForm()">Add gift</button>
+      <button (click)="displayForm = true">Add gift</button>
     }
   </div>
 </div>

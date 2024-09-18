@@ -1,15 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { Gift } from './gift';
 import { BehaviorSubject, EMPTY, Observable, catchError, map, switchMap, tap } from 'rxjs';
 import { GiftService } from './gift.service';
 import { AsyncPipe } from '@angular/common';
-import { User } from '../user/user';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../user/user.service';
 import { FriendService } from '../navbar/friend.service';
@@ -21,32 +21,29 @@ import { FriendService } from '../navbar/friend.service';
   templateUrl: './gift.component.html',
   styleUrl: './gift.component.css',
 })
-export class GiftComponent {
-  gifts$: BehaviorSubject<Gift[]>;
-  isFriend$: Observable<boolean>;
-  displayForm: boolean;
-  giftFormGroup: FormGroup;
+export class GiftComponent implements OnInit{
+  gifts$ = new BehaviorSubject<Gift[]>([]);
+  isFriend$ = new BehaviorSubject<boolean>(false);
+  giftFormGroup!: FormGroup
+  displayForm = false
   isLogged = false;
-  username = ""
 
-  constructor(private fb: FormBuilder, private giftService: GiftService, route: ActivatedRoute, private userService: UserService, private friendService: FriendService) {
+  constructor(private fb: FormBuilder, private giftService: GiftService, private route: ActivatedRoute, private userService: UserService, private friendService: FriendService) {}
+
+  ngOnInit(){
     this.giftFormGroup = this.fb.group({
       id: ['0'],
       imageUrl: [''],
       location: [''],
-      name: [''],
+      name: ['', [Validators.required, Validators.maxLength(255), Validators.minLength(4)]],
     });
-    this.displayForm = false;
-    this.isFriend$ = new BehaviorSubject<boolean>(false);
-    this.gifts$ = new BehaviorSubject<Gift[]>([]);
-    this.isFriend$ = route.params.pipe(switchMap(params => {
-      this.username = params['id'];
-      this.isLogged = this.userService.isLoggedUser(this.username);
-      this.giftService.getCurrentGifts(this.username).subscribe(dto => this.gifts$.next(dto.list))
-      return this.friendService.getFriendRequest(params['id']).pipe(map(dto => dto.used));
-    }), catchError(() => EMPTY))
 
-
+    this.route.params.pipe(switchMap(params => {
+      const username = params['id'];
+      this.isLogged = this.userService.isLoggedUser(username);
+      this.giftService.getCurrentGifts(username).subscribe(dto => this.gifts$.next(dto.list))
+      return this.friendService.getFriendRequest(params['id']);
+    }),map(fr => this.isFriend$.next(fr.used)), catchError(() => EMPTY)).subscribe()
   }
 
   onSubmit() {
@@ -88,14 +85,6 @@ export class GiftComponent {
   updateGift(id: number) {
     const found = this.findById(id)!;
     this.giftFormGroup.setValue(found);
-    this.openForm();
-  }
-
-  openForm() {
-    this.displayForm = true;
-  }
-
-  closeForm() {
-    this.displayForm = false;
+    this.displayForm = true
   }
 }

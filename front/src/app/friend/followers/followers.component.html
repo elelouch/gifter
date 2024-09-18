@@ -1,7 +1,7 @@
 <div>
   <ul>
     @for(user of followers$ | async; track user.id) {
-      <li><a [routerLink]="['/app','user']">{{user.username}}</a></li>
+      <li><a [routerLink]="['/app','user', user.username]">{{user.username}}</a></li>
     }
   </ul>
 </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from './user';
 import { BehaviorSubject, Observable, tap, switchMap, catchError, EMPTY, map } from 'rxjs';
@@ -18,16 +18,17 @@ import { UpdateUser } from '../edit-user/edit-user';
   templateUrl: './user.component.html',
   styleUrl: './user.component.css',
 })
-export class UserComponent {
+export class UserComponent implements OnInit{
   user$ = new BehaviorSubject<User>({} as User);
-  followReq$: BehaviorSubject<FriendRequest | null>;
+  followReq$ = new BehaviorSubject<FriendRequest | null>(null);
   logged = false;
-  isFriend = false;
+  isFollower = false;
+  showForm = false;
 
-  constructor(private userService: UserService, route: ActivatedRoute, private friendService: FriendService) {
-    this.followReq$ = new BehaviorSubject<FriendRequest | null>(null);
+  constructor(private userService: UserService,private route: ActivatedRoute, private friendService: FriendService) {}
 
-    route.params.pipe(switchMap(params => {
+  ngOnInit() {
+    this.route.params.pipe(switchMap(params => {
       const username = params['id']
       this.logged = this.userService.isLoggedUser(username);
       return this.userService.getByUsername(username)
@@ -43,13 +44,15 @@ export class UserComponent {
   }
 
   sendFriendRequest(userId: number) {
-    this.friendService.sendFriendRequest(Number(userId)).subscribe((friendReq) => {
-      this.followReq$.next(friendReq)
+    this.friendService.sendFriendRequest(Number(userId)).subscribe((followReq) => {
+      this.isFollower = followReq.used;
+      this.followReq$.next(followReq)
     })
   }
 
   deleteFriendRequest(requestId: number) {
     this.friendService.removeFriendRequest(Number(requestId)).subscribe(()=>{
+      this.isFollower = false
       this.followReq$.next(null)
     })
   }

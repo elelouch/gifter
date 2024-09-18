@@ -23,10 +23,14 @@
             <button (click)="sendFriendRequest(user.id)">Follow Request</button>
           }
       } @else {
-        <button>Edit User</button>
-        <app-edit-user (newUser)="updateUser($event)"></app-edit-user>
+        <button (click)="showForm = !showForm">Update Info</button>
+        @if(showForm) {
+          <app-edit-user [userToLoad]="user" (newUser)="updateUser($event)"></app-edit-user>
+        }
       }
     </div>
-    <app-gift></app-gift>
+    @if((followReq$ |async)?.used || logged){
+      <app-gift></app-gift>
+    }
   }
 </div>
