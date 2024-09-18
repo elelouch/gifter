@@ -16,3 +16,12 @@ body {
   flex-wrap: wrap; /* Allow items to wrap to the next line */
   height:100%;
 }
+
+.main-outlet-div{
+  border:1px solid black;
+  background:black;
+  max-width: 50%;
+  height: 100vh;
+  margin-left:auto;
+  margin-right:auto;
+}

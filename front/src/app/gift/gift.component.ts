@@ -9,16 +9,18 @@ import { AsyncPipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../user/user.service';
 import { FriendService } from '../navbar/friend.service';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { GiftDialogComponent } from './gift-dialog/gift-dialog.component';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-gift',
   standalone: true,
-  imports: [AsyncPipe, MatFormFieldModule, MatInputModule, MatButtonModule],
+  imports: [AsyncPipe, MatFormFieldModule, MatInputModule, MatButtonModule, MatListModule, MatIconModule],
   templateUrl: './gift.component.html',
   styleUrl: './gift.component.css',
 })
@@ -27,6 +29,7 @@ export class GiftComponent implements OnInit{
   isFriend$ = new BehaviorSubject<boolean>(false);
   isLogged = false;
   giftDialog = inject(MatDialog);
+
 
   constructor(private giftService: GiftService, private route: ActivatedRoute, private userService: UserService, private friendService: FriendService) {}
 
@@ -40,14 +43,8 @@ export class GiftComponent implements OnInit{
   }
 
   openDialog(giftId: number) {
-    const dialogRef = this.giftDialog.open(GiftDialogComponent, {
-      data:{
-        id: [String(giftId)],
-        imageUrl: [''],
-        location: [''],
-        name: ['', [Validators.required, Validators.maxLength(255), Validators.minLength(4)]],
-      }
-    });
+    const found = this.findById(giftId);
+    const dialogRef = this.giftDialog.open(GiftDialogComponent, {data:{...found}});
 
     dialogRef.afterClosed().subscribe(gift => {
       if(!gift) return;

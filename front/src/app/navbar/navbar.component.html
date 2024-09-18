@@ -6,9 +6,13 @@
     <a mat-icon-button [routerLink]="friendsRoute" routerLinkActive="activate" ariaCurrentWhenActive="page">
       <mat-icon>people</mat-icon>
     </a>
+    <span class="example-spacer">
+    </span>
     <a mat-icon-button (click)="logout()" routerLink="/login" routerLinkActive="activate" ariaCurrentWhenActive="page">
       <mat-icon>logout</mat-icon>
     </a>
   </mat-toolbar>
-  <router-outlet></router-outlet>
+  <div class="main-outlet-div">
+    <router-outlet></router-outlet>
+  </div>
 </div>

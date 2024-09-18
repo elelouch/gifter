@@ -1,13 +1,10 @@
 <div>
   @if(user$ | async; as user) {
-    <div>
-      <span>{{user.username}}</span>
-    </div>
-    <div>
-      <span>{{user.firstName}} {{user.lastName}}</span>
-    </div>
-    <div>
-    </div>
+    <mat-list>
+      <mat-list-item>&#64;{{user.username}}</mat-list-item>
+      <mat-list-item>{{user.firstName}}</mat-list-item>
+      <mat-list-item>{{user.lastName}}</mat-list-item>
+    </mat-list>
     <div>
       @if(!logged) {
         @if(followReq$ | async; as fr) {

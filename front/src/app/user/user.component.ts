@@ -10,11 +10,12 @@ import { FriendService } from '../navbar/friend.service';
 import { FriendRequest } from '../friend/friend.request';
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import { UpdateUser } from '../edit-user/edit-user';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, GiftComponent, RouterOutlet, EditUserComponent ],
+  imports: [AsyncPipe, FormsModule, GiftComponent, RouterOutlet, EditUserComponent, MatListModule ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css',
 })

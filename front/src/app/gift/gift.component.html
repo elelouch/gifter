@@ -1,26 +1,27 @@
 <div>
-  <ul>
-    @if((isFriend$ | async) || isLogged) {
-      @for(gift of gifts$ | async; track gift.id) {
-      <li>
-        <span>{{ gift.name }}</span>
-        <div>
-          <span><img [src]="gift.imageUrl" alt="Gift image" /></span>
-          <span>{{ gift.location }}</span>
-        </div>
-        @if(isLogged) {
-          <div>
-            <button (click)="openDialog(gift.id)">Update</button>
-            <button (click)="removeGiftById(gift.id)">Remove</button>
-          </div>
-        }
-      </li>
-      }
-    }
-  </ul>
   <div>
+    <h3>Gifts List</h3>
     @if(isLogged) {
-      <button (click)="openDialog(0)">Add gift</button>
+      <button mat-button (click)="openDialog(0)"><mat-icon>add</mat-icon></button>
     }
   </div>
+  <mat-divider></mat-divider>
+  <mat-list>
+      @if((isFriend$ | async) || isLogged) {
+        @for(gift of gifts$ | async; track gift.id) {
+          <mat-list-item>
+            <span matListItemTitle>{{ gift.name }}</span>
+            <img matListItemAvatar [src]="gift.imageUrl" alt="gift image">
+            <a matListItemLine>{{gift.imageUrl}}</a>
+            <span>
+              @if(isLogged) {
+                <button mat-button (click)="openDialog(gift.id)"><mat-icon>repeat</mat-icon></button>
+                <button mat-button (click)="removeGiftById(gift.id)"><mat-icon>delete</mat-icon></button>
+              }
+            </span>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        }
+      }
+  </mat-list>
 </div>
