@@ -32,21 +32,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public GifterUserDto updateUser(UpdateUserDto userDto) {
-        GifterUser current = getCurrentUser();
-        userRepository.findByEmailOrUsername(userDto.getEmail(), userDto.getUsername()).ifPresent(user -> {
-            if (user.getEmail().equals(current.getEmail())) {
-                throw new EmailAlreadyInUseException();
-            }
-            if (user.getUsername().equals(current.getUsername())) {
-                throw new UsernameAlreadyInUseException();
-            }
+        GifterUser loggedUser = getCurrentUser();
+        userRepository.findByEmailOrUsername(userDto.getEmail(), userDto.getUsername()).ifPresent(fetchedUser -> {
+            boolean equalEmails = loggedUser.getEmail().equals(fetchedUser.getEmail());
+            boolean equalUsernames = loggedUser.getUsername().equals(fetchedUser.getUsername());
+            boolean itsHimself = equalUsernames && equalEmails;
+
+            if(itsHimself) return;
+
+            if (equalEmails) throw new EmailAlreadyInUseException();
+            if (equalUsernames) throw new UsernameAlreadyInUseException();
         });
-        current.setEmail(userDto.getEmail());
-        current.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        current.setFirstName(userDto.getFirstName());
-        current.setLastName(userDto.getLastName());
-        current.setUsername(userDto.getUsername());
-        return GifterUserDto.fromEntity(current);
+        loggedUser.setEmail(userDto.getEmail());
+        loggedUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        loggedUser.setFirstName(userDto.getFirstName());
+        loggedUser.setLastName(userDto.getLastName());
+        loggedUser.setUsername(userDto.getUsername());
+        return GifterUserDto.fromEntity(loggedUser);
     }
 
     @Override
@@ -73,8 +75,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public FollowersDto getFollowers() {
-        return userRepository.findById(getCurrentUser().getId()).map(user -> {
-            List<GifterUserDto> list = GifterUserDto.fromEntity(List.copyOf(user.getFollowers()));
+        return userRepository.findById(getCurrentUser().getId()).map(fetchedUser -> {
+            List<GifterUserDto> list = GifterUserDto.fromEntity(List.copyOf(fetchedUser.getFollowers()));
             FollowersDto dto = new FollowersDto();
             dto.setList(list);
             return dto;

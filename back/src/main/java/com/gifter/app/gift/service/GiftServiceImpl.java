@@ -28,9 +28,9 @@ public class GiftServiceImpl implements GiftService {
 
     @Override
     public UpdateGiftsDto getCurrentUserGifts(String username) {
-        return userRepository.findByUsername(username).map(user -> {
+        return userRepository.findByUsername(username).map(fetchedUser -> {
             UpdateGiftsDto dto = new UpdateGiftsDto();
-            dto.setList(List.copyOf(user.getGifts()));
+            dto.setList(List.copyOf(fetchedUser.getGifts()));
             return dto;
         }).orElseThrow(() -> new UsernameNotFoundException("Gifts: User not found"));
     }
