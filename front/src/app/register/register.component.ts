@@ -6,11 +6,14 @@ import { BehaviorSubject, catchError, map, of } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import { UserRegister } from '../user/user.register';
+import {MatCardModule} from '@angular/material/card';
+import {MatListModule} from '@angular/material/list';
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, AsyncPipe, EditUserComponent],
+  imports: [RouterLink, RouterLinkActive, AsyncPipe, EditUserComponent, MatCardModule, MatListModule, MatButtonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })

@@ -1,43 +1,36 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { Gift } from './gift';
-import { BehaviorSubject, EMPTY, Observable, catchError, map, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, catchError, map, switchMap } from 'rxjs';
 import { GiftService } from './gift.service';
 import { AsyncPipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../user/user.service';
 import { FriendService } from '../navbar/friend.service';
+import {MatButtonModule} from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import { GiftDialogComponent } from './gift-dialog/gift-dialog.component';
 
 @Component({
   selector: 'app-gift',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, AsyncPipe],
+  imports: [AsyncPipe, MatFormFieldModule, MatInputModule, MatButtonModule],
   templateUrl: './gift.component.html',
   styleUrl: './gift.component.css',
 })
 export class GiftComponent implements OnInit{
   gifts$ = new BehaviorSubject<Gift[]>([]);
   isFriend$ = new BehaviorSubject<boolean>(false);
-  giftFormGroup!: FormGroup
-  displayForm = false
   isLogged = false;
+  giftDialog = inject(MatDialog);
 
-  constructor(private fb: FormBuilder, private giftService: GiftService, private route: ActivatedRoute, private userService: UserService, private friendService: FriendService) {}
+  constructor(private giftService: GiftService, private route: ActivatedRoute, private userService: UserService, private friendService: FriendService) {}
 
   ngOnInit(){
-    this.giftFormGroup = this.fb.group({
-      id: ['0'],
-      imageUrl: [''],
-      location: [''],
-      name: ['', [Validators.required, Validators.maxLength(255), Validators.minLength(4)]],
-    });
-
     this.route.params.pipe(switchMap(params => {
       const username = params['id'];
       this.isLogged = this.userService.isLoggedUser(username);
@@ -46,12 +39,20 @@ export class GiftComponent implements OnInit{
     }),map(fr => this.isFriend$.next(fr.used)), catchError(() => EMPTY)).subscribe()
   }
 
-  onSubmit() {
-    const gift: Gift = this.giftFormGroup.getRawValue();
-    this.displayForm = false;
-    this.addGift(gift);
-    this.giftFormGroup.reset();
-    this.giftFormGroup.patchValue({id: '0'});
+  openDialog(giftId: number) {
+    const dialogRef = this.giftDialog.open(GiftDialogComponent, {
+      data:{
+        id: [String(giftId)],
+        imageUrl: [''],
+        location: [''],
+        name: ['', [Validators.required, Validators.maxLength(255), Validators.minLength(4)]],
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(gift => {
+      if(!gift) return;
+      this.addGift(gift);
+    })
   }
 
   addGift(gift: Gift) {
@@ -82,9 +83,5 @@ export class GiftComponent implements OnInit{
     });
   }
 
-  updateGift(id: number) {
-    const found = this.findById(id)!;
-    this.giftFormGroup.setValue(found);
-    this.displayForm = true
-  }
+
 }

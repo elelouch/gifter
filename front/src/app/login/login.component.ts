@@ -20,11 +20,15 @@ import {
 } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormField} from '@angular/material/form-field';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, RouterLinkActive, RouterLink, AsyncPipe],
+  imports: [FormsModule, ReactiveFormsModule, RouterLinkActive, RouterLink, AsyncPipe, MatButtonModule, MatCardModule, MatInputModule, MatFormField],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -32,7 +36,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   loginMessage$: BehaviorSubject<string>
 
-  constructor(
+ constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,

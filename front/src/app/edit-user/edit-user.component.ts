@@ -3,11 +3,15 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserRegister } from '../user/user.register';
 import { User } from '../user/user';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormField} from '@angular/material/form-field';
+import {MatCardModule} from '@angular/material/card';
+import {MatInputModule} from '@angular/material/input';
 
 @Component({
   selector: 'app-edit-user',
   standalone: true,
-  imports: [ReactiveFormsModule , AsyncPipe],
+  imports: [ReactiveFormsModule , AsyncPipe, MatButtonModule, MatCardModule, MatInputModule, MatFormField],
   templateUrl: './edit-user.component.html',
   styleUrl: './edit-user.component.css'
 })

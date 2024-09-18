@@ -1,10 +1,14 @@
 <div>
-  <nav>
-    <ul>
-      <li><a (click)="logout()" routerLink="/login" routerLinkActive="activate" ariaCurrentWhenActive="page">Logout</a></li>
-      <li><a [routerLink]="mainUsernamePath" routerLinkActive="activate">Home</a></li>
-      <li><a [routerLink]="friendsRoute" routerLinkActive="activate" ariaCurrentWhenActive="page">People</a></li>
-    </ul>
-  </nav>
+  <mat-toolbar>
+    <a mat-icon-button [routerLink]="mainUsernamePath" routerLinkActive="activate">
+      <mat-icon>home</mat-icon>
+    </a>
+    <a mat-icon-button [routerLink]="friendsRoute" routerLinkActive="activate" ariaCurrentWhenActive="page">
+      <mat-icon>people</mat-icon>
+    </a>
+    <a mat-icon-button (click)="logout()" routerLink="/login" routerLinkActive="activate" ariaCurrentWhenActive="page">
+      <mat-icon>logout</mat-icon>
+    </a>
+  </mat-toolbar>
   <router-outlet></router-outlet>
 </div>

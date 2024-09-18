@@ -1,16 +1,19 @@
-<div>
-  <div>
-    Already have an account?
-    <a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">Log in</a>
-  </div>
-  <app-edit-user (newUser)="onSubmit($event)"></app-edit-user>
-  <div>
-    <ol>
-      <li>The username can't contain spaces, nor multiple hyphens</li>
-      <li>The password must contain at least: one letter, one digit, 8 characters long</li>
-    </ol>
-  </div>
-  <div>
-    {{creationMessage$ | async}}
-  </div>
+<div class="form-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Register</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <app-edit-user (newUser)="onSubmit($event)"></app-edit-user>
+      <mat-list>
+        <mat-list-item>The username can't contain spaces, nor multiple hyphens</mat-list-item>
+        <mat-list-item>The password must contain at least: one letter, one digit, 8 characters long</mat-list-item>
+      </mat-list>
+      <mat-card-footer>
+        <span>Already have an account?</span>
+        <a mat-stroked-button routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">Log in</a>
+        <span>{{creationMessage$ | async}}</span>
+      </mat-card-footer>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -1,26 +1,4 @@
 <div>
-  <form
-    [hidden]="!displayForm"
-    [formGroup]="giftFormGroup"
-    id="gift-form"
-    (ngSubmit)="onSubmit()"
-  >
-    <span>Gift</span>
-    <div>
-      <label for="name">Name</label
-      ><input id="name" formControlName="name" type="text" />
-    </div>
-    <div>
-      <label for="location">Location</label
-      ><input id="location" formControlName="location" type="text" />
-    </div>
-    <div>
-      <label for="imageUrl">Image Url</label
-      ><input id="imageUrl" formControlName="imageUrl" type="text" />
-    </div>
-    <button [disabled]="!giftFormGroup.valid">Submit</button>
-    <button (click)="displayForm = false; $event.preventDefault()">Close</button>
-  </form>
   <ul>
     @if((isFriend$ | async) || isLogged) {
       @for(gift of gifts$ | async; track gift.id) {
@@ -32,7 +10,7 @@
         </div>
         @if(isLogged) {
           <div>
-            <button (click)="updateGift(gift.id)">Update</button>
+            <button (click)="openDialog(gift.id)">Update</button>
             <button (click)="removeGiftById(gift.id)">Remove</button>
           </div>
         }
@@ -42,7 +20,7 @@
   </ul>
   <div>
     @if(isLogged) {
-      <button (click)="displayForm = true">Add gift</button>
+      <button (click)="openDialog(0)">Add gift</button>
     }
   </div>
 </div>
