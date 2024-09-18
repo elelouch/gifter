@@ -6,19 +6,27 @@
     <div>
       <span>{{user.firstName}} {{user.lastName}}</span>
     </div>
-    @if(!logged) {
-      @if(followReq$ | async; as friendRequest) {
-          <button (click)="deleteFriendRequest(friendRequest.id)">
-            @if(friendRequest.used){
-              Stop Following
-            } @else {
-              Cancel Follow Request
-            }
-          </button>
-        } @else {
-          <button (click)="sendFriendRequest(user.id)">Follow Request</button>
-        }
-    }
+    <div>
+
+    </div>
+    <div>
+      @if(!logged) {
+        @if(followReq$ | async; as fr) {
+            <button (click)="deleteFriendRequest(fr.id)">
+              @if(fr.used){
+                Stop Following
+              } @else {
+                Cancel Follow Request
+              }
+            </button>
+          } @else {
+            <button (click)="sendFriendRequest(user.id)">Follow Request</button>
+          }
+      } @else {
+        <button>Edit User</button>
+        <app-edit-user (newUser)="updateUser($event)"></app-edit-user>
+      }
+    </div>
     <app-gift></app-gift>
   }
 </div>

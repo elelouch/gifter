@@ -5,6 +5,7 @@ import { User } from './user';
 import { UserFollowers } from './user.followers';
 import { BehaviorSubject, map } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
+import { UpdateUser } from '../edit-user/edit-user';
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +40,10 @@ export class UserService {
   getFollowing() {
     const url = `${environment.apiUrl}/user/following`;
     return this.http.get<UserFollowers>(url);
+  }
+
+  updateUser(updateUser: UpdateUser) {
+    const url = `${environment.apiUrl}/user`;
+    return this.http.put<User>(url, updateUser);
   }
 }
