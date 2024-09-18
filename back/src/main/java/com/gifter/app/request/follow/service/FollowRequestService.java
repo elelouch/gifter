@@ -15,7 +15,7 @@ public interface FollowRequestService {
 
     UserFollowRequestDto createFollowRequest(@Valid FollowRequestDto followRequest);
 
-    Optional<UserFollowRequestDto> getFollowRequest(Long destinationId);
+    Optional<UserFollowRequestDto> getFollowRequest(String destinationUsername);
 
     void useFollowRequest(Long id);
 }

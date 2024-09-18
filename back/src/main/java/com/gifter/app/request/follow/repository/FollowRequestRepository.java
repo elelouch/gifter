@@ -15,7 +15,7 @@ public interface FollowRequestRepository extends JpaRepository<FollowRequest, Lo
     @Query("select fr from FollowRequest fr where fr.userDestination.id = :userId and not fr.used")
     List<FollowRequest> findUserFollowRequests(@Param("userId")Long userId);
 
-    @Query("select fr from FollowRequest fr where fr.userOrigin.id = :orig and fr.userDestination.id = :dest")
-    Optional<FollowRequest> findByOrigAndDestId(@Param("orig")Long origId, @Param("dest")Long destId);
+    @Query("select fr from FollowRequest fr where fr.userOrigin.id = :orig and fr.userDestination.username = :dest")
+    Optional<FollowRequest> findByOrigAndDestId(@Param("orig")Long origId, @Param("dest")String destUsername);
 
 }

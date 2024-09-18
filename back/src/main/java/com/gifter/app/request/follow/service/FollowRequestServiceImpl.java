@@ -61,9 +61,9 @@ public class FollowRequestServiceImpl implements FollowRequestService {
     }
 
     @Override
-    public Optional<UserFollowRequestDto> getFollowRequest(Long destinationId) {
+    public Optional<UserFollowRequestDto> getFollowRequest(String destinationUsername) {
         Long currentId = getCurrentUser().getId();
-        return followRequestRepository.findByOrigAndDestId(currentId, destinationId).map(UserFollowRequestDto::fromEntity);
+        return followRequestRepository.findByOrigAndDestId(currentId, destinationUsername).map(UserFollowRequestDto::fromEntity);
     }
 
     @Override
@@ -71,6 +71,7 @@ public class FollowRequestServiceImpl implements FollowRequestService {
         FollowRequest followRequest = followRequestRepository.findById(id).orElseThrow(FollowRequestNotFound::new);
         GifterUser orig = followRequest.getUserOrigin();
         GifterUser dest = followRequest.getUserDestination();
+        followRequest.setUsed(true);
         orig.getFollowing().add(dest);
         dest.getFollowers().add(orig);
         followRequestRepository.save(followRequest);

@@ -6,9 +6,13 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { Gift } from './gift';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, catchError, map, switchMap, tap } from 'rxjs';
 import { GiftService } from './gift.service';
 import { AsyncPipe } from '@angular/common';
+import { User } from '../user/user';
+import { ActivatedRoute } from '@angular/router';
+import { UserService } from '../user/user.service';
+import { FriendService } from '../navbar/friend.service';
 
 @Component({
   selector: 'app-gift',
@@ -18,13 +22,14 @@ import { AsyncPipe } from '@angular/common';
   styleUrl: './gift.component.css',
 })
 export class GiftComponent {
-  giftsSubject: BehaviorSubject<Gift[]>;
+  gifts$: BehaviorSubject<Gift[]>;
+  isFriend$: Observable<boolean>;
   displayForm: boolean;
   giftFormGroup: FormGroup;
-  @Input() isOwner = false;
-  @Input() isFriend = false;
+  isLogged = false;
+  username = ""
 
-  constructor(private fb: FormBuilder, private giftService: GiftService) {
+  constructor(private fb: FormBuilder, private giftService: GiftService, route: ActivatedRoute, private userService: UserService, private friendService: FriendService) {
     this.giftFormGroup = this.fb.group({
       id: ['0'],
       imageUrl: [''],
@@ -32,10 +37,16 @@ export class GiftComponent {
       name: [''],
     });
     this.displayForm = false;
-    this.giftsSubject = new BehaviorSubject<Gift[]>([]);
-    this.giftService.getCurrentGifts().subscribe((updt) => {
-      this.giftsSubject.next(updt.list);
-    });
+    this.isFriend$ = new BehaviorSubject<boolean>(false);
+    this.gifts$ = new BehaviorSubject<Gift[]>([]);
+    this.isFriend$ = route.params.pipe(switchMap(params => {
+      this.username = params['id'];
+      this.isLogged = this.userService.isLoggedUser(this.username);
+      this.giftService.getCurrentGifts(this.username).subscribe(dto => this.gifts$.next(dto.list))
+      return this.friendService.getFriendRequest(params['id']).pipe(map(dto => dto.used));
+    }), catchError(() => EMPTY))
+
+
   }
 
   onSubmit() {
@@ -54,23 +65,23 @@ export class GiftComponent {
         found.location = giftUpdated.location;
         found.name = giftUpdated.name;
       } else {
-        const currList = this.giftsSubject.getValue();
+        const currList = this.gifts$.getValue();
         currList.push(giftUpdated);
-        this.giftsSubject.next(currList);
+        this.gifts$.next(currList);
       }
     });
   }
 
   findById(id: number){
-    return this.giftsSubject.getValue().find((curr) => curr.id === id);
+    return this.gifts$.getValue().find((curr) => curr.id === id);
   }
 
   removeGiftById(id: number) {
     this.giftService.deleteGift(id).subscribe(() => {
-      const list = this.giftsSubject.getValue();
+      const list = this.gifts$.getValue();
       const i = list.findIndex((curr) => curr.id === id)
       list.splice(i,  1);
-      this.giftsSubject.next(list);
+      this.gifts$.next(list);
     });
   }
 

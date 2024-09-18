@@ -22,15 +22,15 @@
     <button (click)="closeForm(); $event.preventDefault()">Close</button>
   </form>
   <ul>
-    @if(isFriend || isOwner) {
-      @for(gift of giftsSubject | async; track gift.id) {
+    @if((isFriend$ | async) || isLogged) {
+      @for(gift of gifts$ | async; track gift.id) {
       <li>
         <span>{{ gift.name }}</span>
         <div>
           <span><img [src]="gift.imageUrl" alt="Gift image" /></span>
           <span>{{ gift.location }}</span>
         </div>
-        @if(isOwner) {
+        @if(isLogged) {
           <div>
             <button (click)="updateGift(gift.id)">Update</button>
             <button (click)="removeGiftById(gift.id)">Remove</button>
@@ -41,7 +41,7 @@
     }
   </ul>
   <div>
-    @if(isOwner) {
+    @if(isLogged) {
       <button (click)="openForm()">Add gift</button>
     }
   </div>

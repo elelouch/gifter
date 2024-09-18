@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
             FollowersDto dto = new FollowersDto();
             dto.setList(list);
             return dto;
-        }).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        }).orElseThrow(() -> new UsernameNotFoundException("Users: User not found"));
     }
 
     @Override

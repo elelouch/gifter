@@ -5,11 +5,13 @@ import com.gifter.app.gift.entity.Gift;
 import com.gifter.app.gift.repository.GiftRepository;
 import com.gifter.app.user.entity.GifterUser;
 import com.gifter.app.user.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +24,17 @@ public class GiftServiceImpl implements GiftService {
     @Autowired
     private GiftRepository giftRepository;
 
+    Logger logger = LoggerFactory.getLogger(GiftServiceImpl.class);
+
+    @Override
+    public UpdateGiftsDto getCurrentUserGifts(String username) {
+        return userRepository.findByUsername(username).map(user -> {
+            UpdateGiftsDto dto = new UpdateGiftsDto();
+            dto.setList(List.copyOf(user.getGifts()));
+            return dto;
+        }).orElseThrow(() -> new UsernameNotFoundException("Gifts: User not found"));
+    }
+
     @Override
     public UpdateGiftsDto updateCurrentUserGifts(UpdateGiftsDto dto) {
         GifterUser user = getCurrentUser();
@@ -29,14 +42,8 @@ public class GiftServiceImpl implements GiftService {
         Set<Gift> updatedSet = new HashSet<>(giftRepository.saveAll(giftsSet));
         user.setGifts(updatedSet);
         userRepository.save(user);
-        return UpdateGiftsDto.builder().list(List.copyOf(updatedSet)).build();
-    }
-
-    @Override
-    public UpdateGiftsDto getCurrentUserGifts() {
-        Long currentUserId = getCurrentUser().getId();
-        List<Gift> giftList = List.copyOf(userRepository.findById(currentUserId).get().getGifts());
-        return UpdateGiftsDto.builder().list(giftList).build();
+        dto.setList(List.copyOf(updatedSet));
+        return dto;
     }
 
     private GifterUser getCurrentUser() {

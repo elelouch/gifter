@@ -17,44 +17,38 @@ import { FriendRequest } from '../friend/friend.request';
   styleUrl: './user.component.css',
 })
 export class UserComponent {
-  user$: Observable<User>;
-  isOwner = false;
+  user$ = new BehaviorSubject<User>({} as User);
+  logged = false;
   isFriend = false;
-  requestAlreadySent$: BehaviorSubject<FriendRequest | null>;
+  followReq$: BehaviorSubject<FriendRequest | null>;
 
   constructor(userService: UserService, route: ActivatedRoute, private friendService: FriendService) {
-    this.requestAlreadySent$ = new BehaviorSubject<FriendRequest | null>(null);
+    this.followReq$ = new BehaviorSubject<FriendRequest | null>(null);
 
-    this.user$ = route.params.pipe(switchMap(params => {
-      const selectedUsername = params['id'];
-      return userService.getByUsername(selectedUsername);
-    }), tap(curr => {
-      userService.getCurrentUser().subscribe((logged) => {
-        this.isOwner = logged.email === curr.email &&
-          logged.id === curr.id &&
-          logged.username === curr.username;
-      })
-    }), tap(curr => {
-      this.friendService.checkFriendRequest(curr.id).pipe(tap(followReq =>{
-        this.isFriend = followReq.used;
-        this.requestAlreadySent$.next(followReq);
-      }), catchError(()=>{
-        this.requestAlreadySent$.next(null);
-        return EMPTY
-        })).subscribe();
-    }))
-
+    route.params.pipe(switchMap(params => {
+      const username = params['id']
+      this.logged = userService.isLoggedUser(username);
+      return userService.getByUsername(username)
+    }),tap(curr => this.user$.next(curr)),
+    switchMap((curr) =>{
+      return this.friendService.getFriendRequest(curr.username)
+    }),tap(fr => {
+      this.followReq$.next(fr);
+    }),catchError(()=>{
+      this.followReq$.next(null);
+      return EMPTY
+    })).subscribe()
   }
 
   sendFriendRequest(userId: number) {
     this.friendService.sendFriendRequest(Number(userId)).subscribe((friendReq) => {
-      this.requestAlreadySent$.next(friendReq)
+      this.followReq$.next(friendReq)
     })
   }
 
   deleteFriendRequest(requestId: number) {
     this.friendService.removeFriendRequest(Number(requestId)).subscribe(()=>{
-      this.requestAlreadySent$.next(null)
+      this.followReq$.next(null)
     })
   }
 }

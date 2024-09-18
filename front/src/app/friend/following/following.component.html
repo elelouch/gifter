@@ -1,1 +1,7 @@
-<p>following works!</p>
+<div>
+  <ul>
+    @for(user of following$ | async; track user.id) {
+      <li><a [routerLink]="['/app','user',user.username]">{{user.username}}</a></li>
+    }
+  </ul>
+</div>

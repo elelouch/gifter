@@ -21,9 +21,9 @@ public class GiftController {
     @Autowired
     private GiftService giftService;
 
-    @GetMapping("list")
-    public UpdateGiftsDto getUserGifts() {
-        return giftService.getCurrentUserGifts();
+    @GetMapping("{username}")
+    public UpdateGiftsDto getUserGifts(@PathVariable String username) {
+        return giftService.getCurrentUserGifts(username);
     }
 
     @PostMapping("list")

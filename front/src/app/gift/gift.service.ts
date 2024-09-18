@@ -10,8 +10,8 @@ import { UpdateGift } from './update.gift';
 export class GiftService {
   constructor(private http: HttpClient) {}
 
-  getCurrentGifts() {
-    const url = `${environment.apiUrl}/gift/list`;
+  getCurrentGifts(username: string) {
+    const url = `${environment.apiUrl}/gift/${username}`;
     return this.http.get<UpdateGift>(url);
   }
 

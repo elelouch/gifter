@@ -4,7 +4,7 @@ import com.gifter.app.gift.dto.UpdateGiftsDto;
 import com.gifter.app.gift.entity.Gift;
 
 public interface GiftService {
-    UpdateGiftsDto getCurrentUserGifts();
+    UpdateGiftsDto getCurrentUserGifts(String username);
 
     UpdateGiftsDto updateCurrentUserGifts(UpdateGiftsDto giftsDto);
 

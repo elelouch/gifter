@@ -6,8 +6,8 @@
     <div>
       <span>{{user.firstName}} {{user.lastName}}</span>
     </div>
-    @if(!isOwner) {
-      @if(requestAlreadySent$ | async; as friendRequest) {
+    @if(!logged) {
+      @if(followReq$ | async; as friendRequest) {
           <button (click)="deleteFriendRequest(friendRequest.id)">
             @if(friendRequest.used){
               Stop Following
@@ -19,6 +19,6 @@
           <button (click)="sendFriendRequest(user.id)">Follow Request</button>
         }
     }
-    <app-gift [isOwner]="isOwner" [isFriend]="isFriend"></app-gift>
+    <app-gift></app-gift>
   }
 </div>

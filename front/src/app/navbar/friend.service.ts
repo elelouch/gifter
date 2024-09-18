@@ -20,7 +20,7 @@ export class FriendService {
     return this.http.delete(url);
   }
 
-  checkFriendRequest(destination: number) {
+  getFriendRequest(destination: string) {
     const url = `${environment.apiUrl}/follow/destination/${destination}`;
     return this.http.get<FriendRequest>(url);
   }

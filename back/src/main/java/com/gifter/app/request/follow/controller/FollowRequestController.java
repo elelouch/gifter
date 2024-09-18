@@ -27,8 +27,8 @@ public class FollowRequestController {
         return followRequestService.createFollowRequest(followRequest);
     }
 
-    @GetMapping("/destination/{destinationId}")
-    public ResponseEntity<UserFollowRequestDto> getFollowRequest(@PathVariable Long destinationId) {
+    @GetMapping("destination/{destinationId}")
+    public ResponseEntity<UserFollowRequestDto> getFollowRequest(@PathVariable String destinationId) {
         return ResponseEntity.of(followRequestService.getFollowRequest(destinationId));
     }
 
