@@ -29,6 +29,12 @@
   </div>
   <button type="submit" [disabled]="!registerForm.valid">Submit</button>
   <div>
+    <ol>
+      <li>The username can't contain spaces, nor multiple hyphens</li>
+      <li>The password must contain at least: one letter, one digit, 8 characters long</li>
+    </ol>
+  </div>
+  <div>
     {{creationMessage$ | async}}
   </div>
 </form>

@@ -20,9 +20,9 @@ export class RegisterComponent {
     this.registerForm = fb.group({
       firstName: [""],
       lastName: [""],
-      username: ["", Validators.required],
-      password: ["", Validators.required],
-      email: ["", Validators.required],
+      username: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9]+([_-]?[a-zA-Z0-9])*$")]],
+      password: ["", [Validators.required, Validators.pattern("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")]],
+      email: ["", [Validators.required, Validators.email]],
     })
     this.creationMessage$ = new BehaviorSubject('');
   }
