@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from './user';
-import { BehaviorSubject, Observable, tap, switchMap, catchError, EMPTY, map } from 'rxjs';
+import { BehaviorSubject, tap, switchMap, catchError, EMPTY } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { GiftComponent } from '../gift/gift.component';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { FriendService } from '../navbar/friend.service';
@@ -59,6 +59,7 @@ export class UserComponent implements OnInit{
 
   updateUser(userToUpdate: UpdateUser) {
     this.userService.updateUser(userToUpdate).subscribe(updatedUser => {
+      this.showForm = false;
       this.user$.next(updatedUser);
     })
   }

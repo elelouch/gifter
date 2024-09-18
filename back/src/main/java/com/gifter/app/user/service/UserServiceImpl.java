@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
         loggedUser.setFirstName(userDto.getFirstName());
         loggedUser.setLastName(userDto.getLastName());
         loggedUser.setUsername(userDto.getUsername());
-        return GifterUserDto.fromEntity(loggedUser);
+        return GifterUserDto.fromEntity(userRepository.save(loggedUser));
     }
 
     @Override
