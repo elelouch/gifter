@@ -3,10 +3,11 @@
     <a mat-icon-button [routerLink]="['/app','user', username]" routerLinkActive="activate">
       <mat-icon>home</mat-icon>
     </a>
-    <a mat-icon-button [routerLink]="['/app','friends', 'search']" routerLinkActive="activate" ariaCurrentWhenActive="page">
+    <a mat-icon-button [routerLink]="['/app','friends']" routerLinkActive="activate" ariaCurrentWhenActive="page">
       <mat-icon>people</mat-icon>
     </a>
     <span class="example-spacer">
+      GIFTER
     </span>
     <a mat-icon-button (click)="logout()" routerLink="/login" routerLinkActive="activate" ariaCurrentWhenActive="page">
       <mat-icon>logout</mat-icon>

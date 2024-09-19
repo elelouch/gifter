@@ -7,11 +7,30 @@ import { BehaviorSubject, map } from 'rxjs';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { SearchComponent } from './search/search.component';
+import { FollowersComponent } from './followers/followers.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import { FollowingComponent } from './following/following.component';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'app-friend',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, AsyncPipe, MatListModule, MatButtonModule, MatIconModule],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    AsyncPipe,
+    MatListModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDivider,
+    SearchComponent,
+    FollowersComponent,
+    FollowingComponent,
+    FriendComponent,
+    MatTabsModule
+  ],
   templateUrl: './friend.component.html',
   styleUrl: './friend.component.css'
 })

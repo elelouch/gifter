@@ -1,7 +1,7 @@
 <div>
-  <ul>
+  <mat-nav-list>
     @for(user of followers$ | async; track user.id) {
-      <li><a [routerLink]="['/app','user', user.username]">{{user.username}}</a></li>
+      <a mat-list-item [routerLink]="['/app','user', user.username]">{{user.username}}</a>
     }
-  </ul>
+  </mat-nav-list>
 </div>

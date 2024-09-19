@@ -14,6 +14,7 @@ import {
     map,
     of,
     switchMap,
+    throwError,
 } from 'rxjs';
 import {
   Router,
@@ -60,7 +61,8 @@ export class LoginComponent {
     const dialogRef = this.userDialog.open(EditUserComponent, {data:{}});
 
     dialogRef.afterClosed().pipe(switchMap(userUpdt => {
-      return this.authService.register(userUpdt);
+      if(userUpdt) return this.authService.register(userUpdt)
+      return EMPTY
     }),catchError((error) => {
       console.log(error);
       const errBody = error.error

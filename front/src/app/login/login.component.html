@@ -33,6 +33,13 @@
         <div>
           <span>{{loginMessage$ | async}}</span>
         </div>
+        <div>
+          <ul>
+            <li>Password should have at least: 8 characters long, one number, one character</li>
+            <li>Email must have a valid format</li>
+            <li>Usernames can't have spaces or sequential hyphens</li>
+          </ul>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>

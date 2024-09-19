@@ -1,5 +1,5 @@
 <div>
-  <mat-form-field>
+  <mat-form-field class="search-div-container">
     <mat-label>Search</mat-label>
     <input matInput id="friend-search" type="text" [formControl]="userInput">
   </mat-form-field>
@@ -7,8 +7,8 @@
   </div>
   <mat-nav-list>
     @for(user of usersFound$ | async; track user.id) {
-      <mat-list-item>
-        <a matListItemTitle [routerLink]="['/app','user',user.username]" routerLinkeActive="active" ariaCurrentWhenActive="page">{{user.username}}</a>
+    <mat-list-item matListItemTitle [routerLink]="['/app','user',user.username]" routerLinkeActive="active">
+        <span matListItemTitle>{{user.username}}</span>
         <span matListItemLine>{{user.firstName}} {{user.lastName}}</span>
       </mat-list-item>
     }
