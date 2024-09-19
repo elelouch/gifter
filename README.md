@@ -13,10 +13,26 @@ take claims.
 There are only two endpoints that are public /login and /register.
 
 ### Tech
-- Spring Boot
 - Jwt
-- Angular(Material)
+- Spring Boot 3.3.2
+- Angular 17.3.9 (with Material)
+- Java 17
+- Node 20.17.0
 
-### Details
+### Not (yet) implemented functionalities
 - The jwt secret was not placed outside the program
 - The admin funcionalities are not implemented yet
+- The users can't remove from their followers list another friend
+
+### Usage
+On the /back folder. 
+```console
+    foo@bar:~$ ./mvnw clean install -U #might not be necessary
+    foo@bar:~$ ./mvnw spring-boot:run
+```
+
+On the /front folder.
+```console
+    foo@bar:~$ npm i 
+    foo@bar:~$ ng serve
+```
