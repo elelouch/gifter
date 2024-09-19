@@ -21,7 +21,7 @@ There are only two endpoints that are public /login and /register.
 
 ### Not (yet) implemented functionalities
 - The jwt secret was not placed outside the program
-- The admin funcionalities are not implemented yet
+- The admin functionalities are not implemented yet
 - The users can't remove from their followers list another friend
 
 ### Usage
