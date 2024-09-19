@@ -20,9 +20,9 @@ There are only two endpoints that are public /login and /register.
 - Node 20.17.0
 
 ### Not (yet) implemented functionalities
-- The jwt secret was not placed outside the program
-- The admin functionalities are not implemented yet
-- The users can't remove from their followers list another friend
+- The jwt secret was not placed outside the program.
+- The admin functionalities.
+- The users can't remove from their followers list another friend.
 
 ### Usage
 On the /back folder. 
