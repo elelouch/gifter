@@ -1,5 +1,6 @@
 package com.gifter.app;
 
+import com.gifter.app.gift.entity.Gift;
 import com.gifter.app.user.entity.GifterUser;
 import com.gifter.app.user.entity.Role;
 import com.gifter.app.user.repository.UserRepository;
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
 import java.util.List;
 
 @SpringBootApplication
@@ -47,11 +49,11 @@ public class GifterApplication {
             elo.setRole(Role.USER);
 
             GifterUser nana = new GifterUser();
-            nana.setFirstName("Nany");
-            nana.setLastName("Doxxed");
+            nana.setFirstName("Luciano");
+            nana.setLastName("Diamand");
             nana.setPassword(encoder.encode("admin123"));
-            nana.setEmail("nana@gifter.com");
-            nana.setUsername("nana09");
+            nana.setEmail("ldiamand@gifter.com");
+            nana.setUsername("ldiamand");
             nana.setEnabled(true);
             nana.setRole(Role.USER);
 
