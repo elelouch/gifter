@@ -4,11 +4,14 @@ import { FriendService } from '../navbar/friend.service';
 import { AsyncPipe } from '@angular/common';
 import { FriendRequest } from './friend.request';
 import { BehaviorSubject, map } from 'rxjs';
+import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-friend',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, AsyncPipe],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, AsyncPipe, MatListModule, MatButtonModule, MatIconModule],
   templateUrl: './friend.component.html',
   styleUrl: './friend.component.css'
 })

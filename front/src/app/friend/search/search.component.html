@@ -1,15 +1,16 @@
 <div>
+  <mat-form-field>
+    <mat-label>Search</mat-label>
+    <input matInput id="friend-search" type="text" [formControl]="userInput">
+  </mat-form-field>
   <div>
-    <label for="friend-search">Search</label>
-    <input id="friend-search" type="text" [formControl]="userInput">
   </div>
-  <ol>
+  <mat-nav-list>
     @for(user of usersFound$ | async; track user.id) {
-        <li>
-          <span><a [routerLink]="['/app','user',user.username]" routerLinkeActive="active" ariaCurrentWhenActive="page">{{user.username}}</a></span>
-          <span>{{user.firstName}}</span>
-          <span>{{user.lastName}}</span>
-        </li>
+      <mat-list-item>
+        <a matListItemTitle [routerLink]="['/app','user',user.username]" routerLinkeActive="active" ariaCurrentWhenActive="page">{{user.username}}</a>
+        <span matListItemLine>{{user.firstName}} {{user.lastName}}</span>
+      </mat-list-item>
     }
-  </ol>
+  </mat-nav-list>
 </div>

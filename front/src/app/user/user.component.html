@@ -1,14 +1,13 @@
 <div>
   @if(user$ | async; as user) {
-    <mat-list>
-      <mat-list-item>&#64;{{user.username}}</mat-list-item>
-      <mat-list-item>{{user.firstName}}</mat-list-item>
-      <mat-list-item>{{user.lastName}}</mat-list-item>
-    </mat-list>
-    <div>
-      @if(!logged) {
+    <div class="user-bar-presentation">
+      <span>&#64;{{user.username}}</span>
+      <span>{{user.firstName}} {{user.lastName}}</span>
+      @if (logged) {
+        <button mat-flat-button (click)="openDialog()">Update User Info</button>
+      } @else {
         @if(followReq$ | async; as fr) {
-            <button (click)="deleteFriendRequest(fr.id)">
+            <button mat-flat-button (click)="deleteFriendRequest(fr.id)">
               @if(fr.used){
                 Stop Following
               } @else {
@@ -16,13 +15,8 @@
               }
             </button>
           } @else {
-            <button (click)="sendFriendRequest(user.id)">Follow Request</button>
+            <button mat-flat-button (click)="sendFriendRequest(user.id)">Follow Request</button>
           }
-      } @else {
-        <button (click)="showForm = !showForm">Update Info</button>
-        @if(showForm) {
-          <app-edit-user [userToLoad]="user" (newUser)="updateUser($event)"></app-edit-user>
-        }
       }
     </div>
     @if((followReq$ |async)?.used || logged){

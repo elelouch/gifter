@@ -1,0 +1,10 @@
+.user-bar-presentation {
+  display: flex;
+  flex-direction: row; /* Align items horizontally (default) */
+  justify-content: space-between; /* Align items to the start of the container */
+  align-items: center; /* Vertically center items */
+  gap: 10px; /* Add space between the items */
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
+  height:100%;
+}
+

@@ -22,7 +22,7 @@
   </div>
   <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">Close</button>
-    <button mat-button [disabled]="!giftFormGroup.valid" [mat-dialog-close]="giftFormGroup.getRawValue()" cdkFocusInitial>Ok</button>
+    <button mat-button [disabled]="!giftFormGroup.valid" [mat-dialog-close]="giftFormGroup.getRawValue()">Submit</button>
   </div>
 </form>
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,9 +9,11 @@ import {
 import { AuthService } from '../auth/auth.service';
 import {
     BehaviorSubject,
+    EMPTY,
     catchError,
     map,
     of,
+    switchMap,
 } from 'rxjs';
 import {
   Router,
@@ -24,6 +26,8 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormField} from '@angular/material/form-field';
+import { EditUserComponent } from '../edit-user/edit-user.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -35,6 +39,7 @@ import {MatFormField} from '@angular/material/form-field';
 export class LoginComponent {
   loginForm: FormGroup;
   loginMessage$: BehaviorSubject<string>
+  userDialog = inject(MatDialog);
 
  constructor(
     private fb: FormBuilder,
@@ -51,16 +56,35 @@ export class LoginComponent {
     this.loginMessage$ = new BehaviorSubject('');
   }
 
+  openDialog() {
+    const dialogRef = this.userDialog.open(EditUserComponent, {data:{}});
+
+    dialogRef.afterClosed().pipe(switchMap(userUpdt => {
+      return this.authService.register(userUpdt);
+    }),catchError((error) => {
+      console.log(error);
+      const errBody = error.error
+      this.loginMessage$.next(`${errBody.reason ?? errBody.detail}`);
+      return EMPTY;
+    })).subscribe((user) => {
+      if(user) this.loginMessage$.next(`User ${user.username}  succesfully registered`);
+    })
+  }
+
   onSubmit() {
     this.authService.login(this.loginForm.getRawValue()).pipe(map((user) => {
       this.router.navigate(['app', 'user', user.username]);
       return "";
-    }), catchError((error: HttpErrorResponse,catchs) => {
+    }), catchError((error) =>{
       console.log(error);
       const errBody = error.error
-      return of(`${errBody.reason ?? errBody.detail} Check if credentials are right.`);
+      this.loginMessage$.next(`${errBody.reason ?? errBody.detail}`);
+      return EMPTY;
     })).subscribe(msg => {
       this.loginMessage$.next(msg);
     })
+  }
+
+  errorHandler(error: HttpErrorResponse) {
   }
 }

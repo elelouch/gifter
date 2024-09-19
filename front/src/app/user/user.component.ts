@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from './user';
 import { BehaviorSubject, tap, switchMap, catchError, EMPTY } from 'rxjs';
@@ -10,12 +10,15 @@ import { FriendService } from '../navbar/friend.service';
 import { FriendRequest } from '../friend/friend.request';
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import { UpdateUser } from '../edit-user/edit-user';
-import { MatListModule } from '@angular/material/list';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, GiftComponent, RouterOutlet, EditUserComponent, MatListModule ],
+  imports: [AsyncPipe, FormsModule, GiftComponent, RouterOutlet, EditUserComponent, MatIconModule, MatButtonModule],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css',
 })
@@ -25,6 +28,7 @@ export class UserComponent implements OnInit{
   logged = false;
   isFollower = false;
   showForm = false;
+  userDialog = inject(MatDialog);
 
   constructor(private userService: UserService,private route: ActivatedRoute, private friendService: FriendService) {}
 
@@ -42,6 +46,15 @@ export class UserComponent implements OnInit{
       this.followReq$.next(null);
       return EMPTY
     })).subscribe()
+  }
+
+  openDialog() {
+      const user = this.user$.getValue();
+      const refDialog = this.userDialog.open(EditUserComponent, {data:user})
+      refDialog.afterClosed().subscribe(userUpdate => {
+        if(!userUpdate) return;
+        this.userService.updateUser(userUpdate).subscribe();
+      })
   }
 
   sendFriendRequest(userId: number) {

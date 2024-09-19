@@ -1,9 +1,9 @@
 <div>
   <mat-toolbar>
-    <a mat-icon-button [routerLink]="mainUsernamePath" routerLinkActive="activate">
+    <a mat-icon-button [routerLink]="['/app','user', username]" routerLinkActive="activate">
       <mat-icon>home</mat-icon>
     </a>
-    <a mat-icon-button [routerLink]="friendsRoute" routerLinkActive="activate" ariaCurrentWhenActive="page">
+    <a mat-icon-button [routerLink]="['/app','friends', 'search']" routerLinkActive="activate" ariaCurrentWhenActive="page">
       <mat-icon>people</mat-icon>
     </a>
     <span class="example-spacer">

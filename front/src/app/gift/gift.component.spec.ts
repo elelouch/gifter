@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GiftComponent } from './gift.component';
+import { GiftComponent } from './GiftComponent';
 
 describe('GiftComponent', () => {
   let component: GiftComponent;
@@ -11,7 +11,7 @@ describe('GiftComponent', () => {
       imports: [GiftComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(GiftComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,6 +1,6 @@
 <div>
   <div>
-    <h3>Gifts List</h3>
+    <h1 style="text-align:center;">Gifts List</h1>
     @if(isLogged) {
       <button mat-button (click)="openDialog(0)"><mat-icon>add</mat-icon></button>
     }
@@ -11,8 +11,8 @@
         @for(gift of gifts$ | async; track gift.id) {
           <mat-list-item>
             <span matListItemTitle>{{ gift.name }}</span>
+            <a matListItemLine>{{gift.location}}</a>
             <img matListItemAvatar [src]="gift.imageUrl" alt="gift image">
-            <a matListItemLine>{{gift.imageUrl}}</a>
             <span>
               @if(isLogged) {
                 <button mat-button (click)="openDialog(gift.id)"><mat-icon>repeat</mat-icon></button>

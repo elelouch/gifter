@@ -6,17 +6,19 @@
   </ul>
   <div>
     <span>Follow Requests</span>
-    <ol>
+    <mat-nav-list>
       @for(req of followRequests$ | async; track req.id) {
-        <li>
-          <a [routerLink]="['/app','user',req.requester.username]">{{req.requester.username}}</a>
-          <div>
-            <button (click)="useRequest(req.id)">Accept</button>
-            <button (click)="deleteRequest(req.id)">Remove</button>
-          </div>
-        </li>
+      <mat-list-item>
+        <a [routerLink]="['/app','user',req.requester.username]">{{req.requester.username}}</a>
+        <button mat-icon-button (click)="useRequest(req.id)">
+          <mat-icon>check</mat-icon>
+        </button>
+        <button mat-icon-button (click)="deleteRequest(req.id)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-list-item>
       }
-   </ol>
-     </div>
+    </mat-nav-list>
+  </div>
   <router-outlet></router-outlet>
 </div>

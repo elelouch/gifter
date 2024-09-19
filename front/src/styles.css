@@ -9,7 +9,7 @@ body {
 
 .form-container {
   display: flex;
-  flex-direction: row; /* Align items horizontally (default) */
+  flex-direction: vertical; /* Align items horizontally (default) */
   justify-content: center; /* Align items to the start of the container */
   align-items: center; /* Vertically center items */
   gap: 10px; /* Add space between the items */
