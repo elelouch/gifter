@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class FollowRequestServiceImpl implements FollowRequestService {
@@ -34,7 +35,10 @@ public class FollowRequestServiceImpl implements FollowRequestService {
         if (followRequest.isUsed()) {
             GifterUser origin = followRequest.getUserOrigin();
             GifterUser destination = followRequest.getUserDestination();
-            origin.getFollowers().removeIf(curr -> curr.equals(destination));
+            destination.getFollowers().removeIf(curr -> curr.equals(origin));
+            origin.getFollowing().removeIf(curr -> curr.equals(destination));
+
+            userRepository.save(destination);
             userRepository.save(origin);
         }
         followRequestRepository.delete(followRequest);
