@@ -22,7 +22,7 @@ There are only two endpoints that are public /login and /register.
 ### Not (yet) implemented functionalities
 - The jwt secret was not placed outside the program.
 - The admin functionalities.
-- The users can't remove from their followers list another friend.
+- The users can't remove a follower from its followers list.
 
 ### Usage
 On the /back folder. 
