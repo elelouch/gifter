@@ -4,7 +4,7 @@ Wishlist application.
 - Check your friend's wishlist 
 - Users can follow/unfollow another user.
 - Users can perform creation/deletion operations on their gifts.
-- Only followers can check the wishlist.
+- Only followers can check the user's wishlist.
 
 ### Security 
 The endpoints were secured via JWT, adding a filter on the FilterChain.
